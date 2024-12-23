@@ -13,5 +13,15 @@ insert into iam.role_claims ("role_id", "claim_id") values ('b6bd858c-3852-4185-
 -- public data
 insert into cars ("name") values ('mclaren');
 
-insert into transactions ("type", "buyQty", "buySymbol", "sellQty", "sellSymbol", "sender", "receiver", "timestamp") values ('transfer', NULL, NULL, NULL, NULL, 'Rob - Discovery Bank', 'Rob - Binance', '2021-03-16 06:26:00');
-insert into transactions ("type", "buyQty", "buySymbol", "sellQty", "sellSymbol", "sender", "receiver", "timestamp") values ('transfer', 25.2, 'ADA', 392.4, 'ZAR', NULL, NULL, '2021-03-16 06:26:01');
+insert into transfers ("sender", "receiver", "qty", "symbol") values (NULL, '0xFC2463F32f75010389cd82972e570b4f269C554f', 1.29814, 'ETH');
+insert into transfers ("sender", "receiver", "qty", "symbol") values (NULL, '0x5d8b5358Ad7bEc1932eC0683e49c427fCF0Ba8EE', 0.01963, 'ETH');
+insert into transfers ("sender", "receiver", "qty", "symbol") values (NULL, 'addr1qysgdw6uqzk9tqv744d7pnz9m7pv0tyldyl029d6myvgedqsej9ypqxscxvt5qesv77jxyfgv8cyd70dgf2p3m4wctaqt2569t', 24.36, 'ADA');
+insert into transfers ("sender", "receiver", "qty", "symbol") values (NULL, 'addr1qysgdw6uqzk9tqv744d7pnz9m7pv0tyldyl029d6myvgedqsej9ypqxscxvt5qesv77jxyfgv8cyd70dgf2p3m4wctaqt2569t', 1, 'SPACEBUD3733');
+insert into transfers ("sender", "receiver", "qty", "symbol") values (NULL, 'addr1qysgdw6uqzk9tqv744d7pnz9m7pv0tyldyl029d6myvgedqsej9ypqxscxvt5qesv77jxyfgv8cyd70dgf2p3m4wctaqt2569t', 1, 'SPACEBUD4142');
+
+insert into transactions ("type", "ident", "timestamp") select 'transfer', id, '2024-12-23 00:00:00' from transfers;
+
+insert into prices ("symbol", "priceUsd", "timestamp") values ('ADA', 0.88, '2024-12-23 00:00:00');
+insert into prices ("symbol", "priceUsd", "timestamp") values ('ETH', 3300, '2024-12-23 00:00:00');
+insert into prices ("symbol", "priceUsd", "timestamp") values ('SPACEBUD3733', 897.04, '2024-12-23 00:00:00');
+insert into prices ("symbol", "priceUsd", "timestamp") values ('SPACEBUD4142', 897.04, '2024-12-23 00:00:00');

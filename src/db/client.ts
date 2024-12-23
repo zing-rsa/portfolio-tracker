@@ -1,7 +1,3 @@
-import { dirname, fromFileUrl, resolve } from "@std/path";
-
-import { PostgresMigrate } from "https://deno.land/x/migrate@0.2.5/postgres.ts";
-import { apply } from "https://deno.land/x/migrate@0.2.5/basic.ts";
 import { Client } from "deno-postgres";
 
 const useTls = JSON.parse(Deno.env.get("PG_USE_TLS") ?? "false");
@@ -12,6 +8,12 @@ const clientConfig = {
   hostname: Deno.env.get("PG_HOSTNAME"),
   password: Deno.env.get("PG_PASSWORD"),
   port: Deno.env.get("PG_PORT"),
+  controls: {
+    decoders: {
+      // Custom decoder for decimal
+      numeric: (value: any) => parseFloat(value.toString()),
+    },
+  },
   tls: useTls
     ? {
       enabled: true,

@@ -1,7 +1,7 @@
 import { Router } from "oak/router"
 import * as TransactionsService from "../../services/transactions.service.ts";
 import { NotFoundException } from "../../exceptions.ts";
-import { CreateTransactionDto } from "./dtos.ts";
+import { CreateTradeDto, CreateTransferDto } from "./dtos.ts";
 
 const router = new Router({ prefix: "/transactions"});
 
@@ -16,12 +16,21 @@ router.get("/:id", async (ctx) => {
     ctx.response.body = res;
 })
 
-router.post("/", async (ctx) => {
-    const body: CreateTransactionDto = await ctx.request.body.json();
+router.post("/trade", async (ctx) => {
+    const body: CreateTradeDto = await ctx.request.body.json();
 
-    const res = await TransactionsService.create(body);
+    const res = await TransactionsService.createTrade(body);
 
     ctx.response.status = 201;
 })
+
+router.post("/transfer", async (ctx) => {
+    const body: CreateTransferDto = await ctx.request.body.json();
+
+    const res = await TransactionsService.createTransfer(body);
+
+    ctx.response.status = 201;
+})
+
 
 export default router;

@@ -62,18 +62,30 @@ create table assets (
 create table transactions (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "type" varchar NOT NULL, -- transfer | trade
-    "buyQty" decimal,
-    "buySymbol" varchar,
-    "sellQty" decimal,
-    "sellSymbol" varchar,
+    "ident" int NOT NULL,
+    "timestamp" timestamp NOT NULL,
+    "fees" numeric DEFAULT 0
+);
+
+create table trades (
+    "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "buyQty" numeric NOT NULL,
+    "buySymbol" varchar NOT NULL,
+    "sellQty" numeric NOT NULL,
+    "sellSymbol" varchar NOT NULL
+);
+
+create table transfers (
+    "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "sender" varchar,
     "receiver" varchar,
-    "timestamp" timestamp NOT NULL
+    "qty" numeric NOT NULL,
+    "symbol" varchar NOT NULL
 );
 
 create table prices (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "symbol" varchar NOT NULL,
-    "priceUsd" decimal NOT NULL,
+    "priceUsd" numeric NOT NULL,
     "timestamp" timestamp NOT NULL
 );

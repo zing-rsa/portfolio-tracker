@@ -1,17 +1,21 @@
 import client from "./client.ts"
 import { Price } from "./models.ts";
 
-export async function get(id?: string): Promise<Price | null> {
-    const results = await list(id);
-    return results.length == 0 ? null : results[0];
+export async function list(): Promise<Array<Price>> {
+    const query = `select * from public.prices order by timestamp asc; `;
+
+    console.log("Executing query: ", query)
+    const result = await client.queryObject<Price>(query);
+
+    return result.rows;
 }
 
-export async function list(id?: string): Promise<Array<Price>> {
-    let where = "";
-    if (id != null)
-        where += (where.includes("WHERE") ? "AND " : "WHERE ") + `id = ${id} `;
-
-    const query = `select * from public.prices ${where}; `;
+export async function listLatestOnly(): Promise<Array<Price>> {
+    const query = `
+        with latest_prices as (select symbol, max("timestamp") as "timestamp" from prices group by symbol)
+        select p.id, p.symbol, p."priceUsd", p.timestamp 
+        from latest_prices lp 
+        join prices p on p.symbol = lp.symbol and p."timestamp" = lp.timestamp; `;
 
     console.log("Executing query: ", query)
     const result = await client.queryObject<Price>(query);
