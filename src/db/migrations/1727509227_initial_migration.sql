@@ -61,15 +61,19 @@ create table assets (
 
 create table transactions (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "quantity" decimal NOT NULL,
-    "symbol" varchar NOT NULL,
-    "action" varchar NOT NULL,
+    "type" varchar NOT NULL, -- transfer | trade
+    "buyQty" decimal,
+    "buySymbol" varchar,
+    "sellQty" decimal,
+    "sellSymbol" varchar,
+    "sender" varchar,
+    "receiver" varchar,
     "timestamp" timestamp NOT NULL
 );
 
 create table prices (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "symbol" varchar NOT NULL,
-    "price_usd" decimal NOT NULL,
+    "priceUsd" decimal NOT NULL,
     "timestamp" timestamp NOT NULL
 );

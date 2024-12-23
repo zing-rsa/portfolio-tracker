@@ -12,3 +12,6 @@ insert into iam.role_claims ("role_id", "claim_id") values ('b6bd858c-3852-4185-
 
 -- public data
 insert into cars ("name") values ('mclaren');
+
+insert into transactions ("type", "buyQty", "buySymbol", "sellQty", "sellSymbol", "sender", "receiver", "timestamp") values ('transfer', NULL, NULL, NULL, NULL, 'Rob - Discovery Bank', 'Rob - Binance', '2021-03-16 06:26:00');
+insert into transactions ("type", "buyQty", "buySymbol", "sellQty", "sellSymbol", "sender", "receiver", "timestamp") values ('transfer', 25.2, 'ADA', 392.4, 'ZAR', NULL, NULL, '2021-03-16 06:26:01');

@@ -3,7 +3,7 @@ import * as TransactionsService from "../../services/transactions.service.ts";
 import { NotFoundException } from "../../exceptions.ts";
 import { CreateTransactionDto } from "./dtos.ts";
 
-const router = new Router({ prefix: "/assets"});
+const router = new Router({ prefix: "/transactions"});
 
 router.get("/", async (ctx) => {
     ctx.response.body = await TransactionsService.list();
