@@ -25,8 +25,8 @@ export async function listLatestOnly(): Promise<Array<Price>> {
 
 export async function create(price: Price) {
     const query = `
-    insert into public.prices ("symbol", "price_usd", "timestamp") values
-    ('${price.symbol}', '${price.priceUsd}', '${price.timestamp}')
+    insert into public.prices ("symbol", "priceUsd", "timestamp") values
+    ('${price.symbol}', '${price.priceUsd}', '${price.timestamp.toISOString()}')
     returning *; `;
 
     const result = await client.queryObject<Price>(query);

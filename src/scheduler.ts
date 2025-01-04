@@ -1,4 +1,5 @@
 import * as ScheduleService from "./services/schedule.service.ts";
+import * as PricesService from "./services/prices.service.ts";
 
 export function start() {
     console.log("--------------------");
@@ -26,6 +27,6 @@ async function handleSchedules() {
 
 function functionMapper(functionName: string): Function | undefined {
     return {
-        // "updateComplimentaryRequests": TenantService.updateComplimentaryRequests,
+        "updateTop20Prices": PricesService.updateTop20Prices,
     }[functionName];
 }
