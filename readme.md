@@ -30,3 +30,15 @@ prices
 - asset symbol
 - price
 - price currency
+
+## data persistance approach:
+We want to make sure that once the data is captured to the DB, it is persisted somewhere else as well and easily recoverable should something happen to the DB.
+
+high level:
+- export all data to csv
+- csv to sql
+
+1. export to csv will run daily and contain all transactions(transfers, trades, etc)
+- it will be a point-in-time view of the state in the db
+2. import from csv can be used to generate the sql required to re-instate the DB
+- this can also be used at the beginning to seed the DB with all my historic data
