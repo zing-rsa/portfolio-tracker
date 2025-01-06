@@ -11,7 +11,7 @@ export async function list(id?: string): Promise<Array<Transaction>> {
     if (id != null)
         where += (where.includes("WHERE") ? "AND " : "WHERE ") + `id = ${id} `;
 
-    const query = `select * from public.transactions ${where}; `;
+    const query = `select * from public.transactions ${where} order by "timestamp" asc;`;
 
     console.log("Executing query: ", query)
     const result = await client.queryObject<Transaction>(query);
