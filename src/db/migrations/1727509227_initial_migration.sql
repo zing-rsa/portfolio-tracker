@@ -64,7 +64,8 @@ create table transactions (
     "type" varchar NOT NULL, -- transfer | trade
     "ident" int NOT NULL,
     "timestamp" timestamp NOT NULL,
-    "fees" numeric DEFAULT 0
+    "fees" numeric DEFAULT 0,
+    "feesSymbol" varchar
 );
 
 create table trades (

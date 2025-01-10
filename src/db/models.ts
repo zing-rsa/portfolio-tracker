@@ -37,7 +37,8 @@ export type Transaction = {
     id?: number,
     type: "transfer" | "trade",
     timestamp: Date,
-    fees: number
+    fees: number,
+    feesSymbol: string
 }
 
 export type Transfer = Transaction & {
@@ -53,6 +54,8 @@ export type Trade = Transaction & {
     sellQty: number,
     sellSymbol: string
 }
+
+export type TransactionFlat = Transaction & Transfer & Trade
 
 export type Price = {
     id?: number,

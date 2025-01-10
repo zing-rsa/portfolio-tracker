@@ -6,8 +6,10 @@
     "jsr:@std/assert@1": "1.0.6",
     "jsr:@std/bytes@1": "1.0.2",
     "jsr:@std/bytes@^1.0.2": "1.0.2",
+    "jsr:@std/bytes@^1.0.3": "1.0.3",
     "jsr:@std/crypto@*": "1.0.3",
     "jsr:@std/crypto@1": "1.0.3",
+    "jsr:@std/csv@*": "1.0.4",
     "jsr:@std/dotenv@*": "0.225.2",
     "jsr:@std/encoding@*": "1.0.5",
     "jsr:@std/encoding@1": "1.0.5",
@@ -19,6 +21,7 @@
     "jsr:@std/media-types@1": "1.0.3",
     "jsr:@std/path@*": "1.0.6",
     "jsr:@std/path@1": "1.0.6",
+    "jsr:@std/streams@^1.0.8": "1.0.8",
     "npm:@types/node@*": "18.16.19",
     "npm:express@4.18.2": "4.18.2",
     "npm:joi@17.13.3": "17.13.3",
@@ -59,8 +62,17 @@
     "@std/bytes@1.0.2": {
       "integrity": "fbdee322bbd8c599a6af186a1603b3355e59a5fb1baa139f8f4c3c9a1b3e3d57"
     },
+    "@std/bytes@1.0.3": {
+      "integrity": "e5d5b9e685966314e4edb4be60dfc4bd7624a075bfd4ec8109252b4320f76452"
+    },
     "@std/crypto@1.0.3": {
       "integrity": "a2a32f51ddef632d299e3879cd027c630dcd4d1d9a5285d6e6788072f4e51e7f"
+    },
+    "@std/csv@1.0.4": {
+      "integrity": "aa351de654b10b8a407275b61f588863b9538027fd47aed90dd9e7f54ab5bdc0",
+      "dependencies": [
+        "jsr:@std/streams"
+      ]
     },
     "@std/dotenv@0.225.2": {
       "integrity": "e2025dce4de6c7bca21dece8baddd4262b09d5187217e231b033e088e0c4dd23"
@@ -88,6 +100,12 @@
     },
     "@std/path@1.0.6": {
       "integrity": "ab2c55f902b380cf28e0eec501b4906e4c1960d13f00e11cfbcd21de15f18fed"
+    },
+    "@std/streams@1.0.8": {
+      "integrity": "b41332d93d2cf6a82fe4ac2153b930adf1a859392931e2a19d9fabfb6f154fb3",
+      "dependencies": [
+        "jsr:@std/bytes@^1.0.3"
+      ]
     }
   },
   "npm": {
@@ -489,9 +507,12 @@
   "redirects": {
     "https://deno.land/x/axiod/mod.ts": "https://deno.land/x/axiod@0.26.2/mod.ts",
     "https://deno.land/x/dotenv/mod.ts": "https://deno.land/x/dotenv@v3.2.2/mod.ts",
+    "https://deno.land/x/multiparser/mod.ts": "https://deno.land/x/multiparser@0.114.0/mod.ts",
     "https://deno.land/x/postgres/mod.ts": "https://deno.land/x/postgres@v0.19.3/mod.ts"
   },
   "remote": {
+    "https://deno.land/std@0.114.0/bytes/equals.ts": "69f55fdbd45c71f920c1a621e6c0865dc780cd8ae34e0f5e55a9497b70c31c1b",
+    "https://deno.land/std@0.114.0/bytes/mod.ts": "fedb80b8da2e7ad8dd251148e65f92a04c73d6c5a430b7d197dc39588c8dda6f",
     "https://deno.land/std@0.159.0/_util/assert.ts": "e94f2eb37cebd7f199952e242c77654e43333c1ac4c5c700e929ea3aa5489f74",
     "https://deno.land/std@0.159.0/_util/os.ts": "8a33345f74990e627b9dfe2de9b040004b08ea5146c7c9e8fe9a29070d193934",
     "https://deno.land/std@0.159.0/fs/_util.ts": "fdc156f897197f261a1c096dcf8ff9267ed0ff42bd5b31f55053a4763a4bae3b",
@@ -733,6 +754,9 @@
     "https://deno.land/x/migrate@0.2.5/migrate.ts": "83d14c87b5cc63796ae00a647378f9b13fb7268b347ffc928d772dc50ec45d77",
     "https://deno.land/x/migrate@0.2.5/postgres.ts": "b854250872ffe715aa3c47ac15cd8b8ab8a06fb31aa03d4c0e5fb60d525e33b4",
     "https://deno.land/x/migrate@0.2.5/postgres_deps.ts": "6383769f4fdb97884e033b57be1ddf83c85e75cfc89813bcba74cac0140aeae6",
+    "https://deno.land/x/multiparser@0.114.0/deps.ts": "156a79ce9716a589a49a6486895828316115bc0f9c2107da6022fd5ca2e2ffc3",
+    "https://deno.land/x/multiparser@0.114.0/lib/multiParserV2.ts": "14f8dc877d74b489309764d6a1683f31454faa83c98e6b65cbcf375b727fc1d8",
+    "https://deno.land/x/multiparser@0.114.0/mod.ts": "1c83991a80f9f25b9876a726e96aedc02f09e72da280fcd74ddf1dbc105acfc6",
     "https://deno.land/x/oak@v7.4.0/application.ts": "4ca65eff374e48769402616cc4f229381a645d0355d914b3e8afe364a4947f0f",
     "https://deno.land/x/oak@v7.4.0/async_iterable_reader.ts": "f4447a8d7b5d955ca1923e439b075187d0a3de43b4491f3cee2ee06a7a91179b",
     "https://deno.land/x/oak@v7.4.0/body.ts": "e83af603664dcb1c4a012a273797e7654c1117e83a3c96181008b92c2f0fffba",
