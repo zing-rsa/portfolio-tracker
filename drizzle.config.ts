@@ -4,6 +4,7 @@ export default defineConfig({
   out: "./drizzle",
   schema: "./src/db/schema.ts",
   dialect: "postgresql",
+  schemaFilter: ["public", "iam", "scheduling"],
   dbCredentials: {
     user: Deno.env.get("PG_USER")!,
     host: Deno.env.get("PG_HOSTNAME")!,

@@ -21,4 +21,6 @@ else
         echo "PostgreSQL is not ready yet, waiting..."
         sleep 1
     done
+
+    deno -A --node-modules-dir npm:drizzle-kit migrate
 fi

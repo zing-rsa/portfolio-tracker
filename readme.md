@@ -50,12 +50,23 @@ create a local postgres db:
 ./run_local_db_docker.sh
 ```
 
-create a new migration based off of `./drizzle/schema.ts`:
+push schema to database based off of `./drizzle/schema.ts`(doesn't gen files?):
 ```
 deno --env -A --node-modules-dir npm:drizzle-kit push
+```
+
+generate migration files based on `./drizzle/schema.ts`:
+```
+deno --env -A --node-modules-dir npm:drizzle-kit generate --name=migration_name
+```
+
+add custom migration(generate empty migration file):
+```
+deno --env -A --node-modules-dir npm:drizzle-kit generate --custom --name=seed-users
 ```
 
 migrate db:
 ```
 deno --env -A --node-modules-dir npm:drizzle-kit migrate
 ```
+

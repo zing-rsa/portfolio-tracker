@@ -1,6 +1,10 @@
 -- Current sql file was generated after introspecting the database
 -- If you want to run this migration please uncomment this code before executing migrations
-/*
+
+CREATE SCHEMA "iam";
+--> statement-breakpoint
+CREATE SCHEMA "scheduling";
+--> statement-breakpoint
 CREATE TABLE "migration" (
 	"id" integer PRIMARY KEY NOT NULL,
 	"path" text,
@@ -8,6 +12,47 @@ CREATE TABLE "migration" (
 	"applied_at" timestamp with time zone,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "iam"."tenants" (
+	"id" bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "iam"."iam.tenants_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START WITH 1 CACHE 1),
+	"email" varchar NOT NULL,
+	"name" varchar NOT NULL,
+	"api_key" varchar,
+	CONSTRAINT "tenants_api_key_key" UNIQUE("api_key")
+);
+--> statement-breakpoint
+CREATE TABLE "iam"."claims" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"value" varchar NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "iam"."roles" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"name" varchar NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "iam"."tenant_claims" (
+	"tenant_id" bigint NOT NULL,
+	"claim_id" uuid NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "iam"."tenant_roles" (
+	"tenant_id" bigint NOT NULL,
+	"role_id" uuid NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "iam"."role_claims" (
+	"role_id" uuid NOT NULL,
+	"claim_id" uuid NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "scheduling"."schedules" (
+	"id" uuid DEFAULT gen_random_uuid() NOT NULL,
+	"function_name" varchar NOT NULL,
+	"run_datetime" timestamp,
+	"run_interval_minutes" integer,
+	"last_run_datetime" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "cars" (
@@ -53,4 +98,3 @@ CREATE TABLE "prices" (
 	"timestamp" timestamp NOT NULL
 );
 
-*/

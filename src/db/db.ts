@@ -3,10 +3,8 @@ import pg from "pg";
 
 import { cars as carsSchema } from "./schema.ts";
 
-// Use pg driver.
 const { Pool } = pg;
 
-// Instantiate Drizzle client with pg driver and schema.
 export const db = drizzle({
   client: new Pool({
     user: Deno.env.get("PG_USER")!,
