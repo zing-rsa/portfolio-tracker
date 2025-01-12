@@ -61,6 +61,7 @@ export type TransactionFlat = Transaction & Transfer & Trade
 export type Price = {
     id?: number,
     symbol: string,
-    priceUsd: string,
+    price: string,
+    priceQuotedSymbol: string,
     timestamp: Date
 }

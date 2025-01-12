@@ -12,5 +12,6 @@ export default defineConfig({
     port: parseInt(Deno.env.get("PG_PORT")!),
     database: Deno.env.get("PG_DATABASE")!,
     ssl: false
-  },
+  }, 
+  casing: 'snake_case' 
 });

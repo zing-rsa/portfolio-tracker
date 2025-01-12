@@ -15,5 +15,6 @@ export const db = drizzle({
     database: Deno.env.get("PG_DATABASE")!,
     ssl: false
   }),
-  schema: { carsSchema, transactionsSchema },
+  schema: { carsSchema, transactionsSchema}, 
+  casing: 'snake_case' 
 });

@@ -1,7 +1,7 @@
 import { CreatePriceDto } from "../dtos.ts";
 import { PricesDb } from "../db/mod.ts"
 import { Price } from "../db/models.ts";
-import { fetchLatestPrice, fetchLatestPricesTop20 } from "../gateways/coinmarketcap.ts";
+import { fetchLatestPricesTop20 } from "../gateways/coinmarketcap.ts";
 
 export async function get() {
     const results = await list();
@@ -13,26 +13,8 @@ export async function list() {
 }
 
 export async function create(dto: CreatePriceDto) {
-    const price: Price = { ...dto, priceUsd: dto.priceUsd.toString() };
+    const price: Price = { ...dto, price: dto.priceUsd.toString(), priceQuotedSymbol: "USD" };
     return await PricesDb.create(price);
-}
-
-export async function updateAdaPrice() {
-    const symbol = "ADA";
-    const priceInfo = await fetchLatestPrice(symbol);
-    await PricesDb.create({ symbol: symbol, priceUsd: priceInfo.price.toString(), timestamp: priceInfo.timestamp});
-}
-
-export async function updateEthPrice() {
-    const symbol = "ETH";
-    const priceInfo = await fetchLatestPrice(symbol);
-    await PricesDb.create({ symbol: symbol, priceUsd: priceInfo.price.toString(), timestamp: priceInfo.timestamp});
-}
-
-export async function updateAvaxPrice() {
-    const symbol = "AVAX";
-    const priceInfo = await fetchLatestPrice(symbol);
-    await PricesDb.create({ symbol: symbol, priceUsd: priceInfo.price.toString(), timestamp: priceInfo.timestamp});
 }
 
 
@@ -40,6 +22,6 @@ export async function updateTop20Prices() {
     const priceInfo = await fetchLatestPricesTop20();
 
     for (let price of priceInfo) {
-        await PricesDb.create({ symbol: price.symbol, priceUsd: price.price.toString(), timestamp: price.timestamp});
+        await PricesDb.create({ symbol: price.symbol, price: price.price.toString(), priceQuotedSymbol: "USD", timestamp: price.timestamp});
     }
 }

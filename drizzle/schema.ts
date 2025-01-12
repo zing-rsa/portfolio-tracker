@@ -1,4 +1,4 @@
-import { pgTable, integer, text, timestamp, pgSchema, unique, bigint, varchar, uuid, numeric } from "drizzle-orm/pg-core"
+import { pgTable, integer, text, timestamp, pgSchema, unique, varchar, uuid, numeric } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const iam = pgSchema("iam");
@@ -8,18 +8,17 @@ export const scheduling = pgSchema("scheduling");
 export const migration = pgTable("migration", {
 	id: integer().primaryKey().notNull(),
 	path: text(),
-	appliedPath: text("applied_path"),
-	appliedAt: timestamp("applied_at", { withTimezone: true, mode: 'string' }),
-	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	appliedPath: text(),
+	appliedAt: timestamp({ withTimezone: true, mode: 'string' }),
+	createdAt: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp({ withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 });
 
 export const tenantsInIam = iam.table("tenants", {
-	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	id: bigint({ mode: "number" }).primaryKey().generatedAlwaysAsIdentity({ name: "iam.tenants_id_seq", startWith: 1, increment: 1, minValue: 1, maxValue: 9223372036854775807, cache: 1 }),
+	id: integer().primaryKey().generatedAlwaysAsIdentity({ name: "iam.tenants_id_seq", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647, cache: 1 }),
 	email: varchar().notNull(),
 	name: varchar().notNull(),
-	apiKey: varchar("api_key"),
+	apiKey: varchar(),
 }, (table) => [
 	unique("tenants_api_key_key").on(table.apiKey),
 ]);
@@ -35,28 +34,26 @@ export const rolesInIam = iam.table("roles", {
 });
 
 export const tenantClaimsInIam = iam.table("tenant_claims", {
-	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	tenantId: bigint("tenant_id", { mode: "number" }).notNull(),
-	claimId: uuid("claim_id").notNull(),
+	tenantId: integer().notNull(),
+	claimId: uuid().notNull(),
 });
 
 export const tenantRolesInIam = iam.table("tenant_roles", {
-	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	tenantId: bigint("tenant_id", { mode: "number" }).notNull(),
-	roleId: uuid("role_id").notNull(),
+	tenantId: integer().notNull(),
+	roleId: uuid().notNull(),
 });
 
 export const roleClaimsInIam = iam.table("role_claims", {
-	roleId: uuid("role_id").notNull(),
-	claimId: uuid("claim_id").notNull(),
+	roleId: uuid().notNull(),
+	claimId: uuid().notNull(),
 });
 
 export const schedulesInScheduling = scheduling.table("schedules", {
 	id: uuid().defaultRandom().notNull(),
-	functionName: varchar("function_name").notNull(),
-	runDatetime: timestamp("run_datetime", { mode: 'string' }),
-	runIntervalMinutes: integer("run_interval_minutes"),
-	lastRunDatetime: timestamp("last_run_datetime", { mode: 'string' }),
+	functionName: varchar().notNull(),
+	runDatetime: timestamp({ mode: 'string' }),
+	runIntervalMinutes: integer(),
+	lastRunDatetime: timestamp({ mode: 'string' }),
 });
 
 export const cars = pgTable("cars", {
@@ -98,6 +95,7 @@ export const transfers = pgTable("transfers", {
 export const prices = pgTable("prices", {
 	id: integer().primaryKey().generatedAlwaysAsIdentity({ name: "prices_id_seq", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647, cache: 1 }),
 	symbol: varchar().notNull(),
-	priceUsd: numeric().notNull(),
+	price: numeric().notNull(),
+	priceQuotedSymbol: varchar().notNull().default("USD"),
 	timestamp: timestamp({ mode: 'string' }).notNull(),
 });

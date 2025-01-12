@@ -22,20 +22,20 @@ export async function balances(): Promise<Balance[]> {
             addressMap[element.receiver] = { [element.symbol]: parseFloat(element.qty) };
         } else {
             if (!addressMap[element.receiver][element.symbol]) {
-                addressMap[element.receiver][element.symbol] =  parseFloat(element.qty);
+                addressMap[element.receiver][element.symbol] = parseFloat(element.qty);
             } else { 
-                addressMap[element.receiver][element.symbol] +=  parseFloat(element.qty);
+                addressMap[element.receiver][element.symbol] += parseFloat(element.qty);
             }
         }
 
         if (element.sender) { // don't track null sender
             if (!addressMap[element.sender]) {
-                addressMap[element.sender] = { [element.symbol]: - parseFloat(element.qty) };
+                addressMap[element.sender] = { [element.symbol]: -parseFloat(element.qty) };
             } else {
                 if (!addressMap[element.receiver][element.symbol]) {
-                    addressMap[element.sender][element.symbol] = - parseFloat(element.qty);
+                    addressMap[element.sender][element.symbol] = -parseFloat(element.qty);
                 } else {
-                    addressMap[element.sender][element.symbol] -=  parseFloat(element.qty);
+                    addressMap[element.sender][element.symbol] -= parseFloat(element.qty);
                 }
             }
         }
@@ -43,6 +43,8 @@ export async function balances(): Promise<Balance[]> {
 
     const balances: Balance[] = [];
     const latestPrices = await PricesDb.listLatestOnly();
+
+    console.log(latestPrices)
 
     for (const address in addressMap) {
         const balance: Balance = { address: address, values: [], totalUsd: 0 }
@@ -66,5 +68,17 @@ function getUsdFromValue(value: Value, prices: Price[]) {
         return 0;
     }
 
-    return parseFloat(latestPriceForSymbol.priceUsd) * value.qty;
+    if(latestPriceForSymbol.priceQuotedSymbol != "USD") {
+        const innerPrice = prices.find((p) => latestPriceForSymbol.priceQuotedSymbol == p.symbol);
+
+        if (!innerPrice) {
+            console.error(`No price found for inner symbol. symbol=${value.symbol}`)
+            return 0;
+        }
+
+        return parseFloat(latestPriceForSymbol.price) * parseFloat(innerPrice.price) * value.qty;
+
+    }
+
+    return parseFloat(latestPriceForSymbol.price) * value.qty;
 }
