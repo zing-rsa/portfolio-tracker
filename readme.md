@@ -42,3 +42,20 @@ high level:
 - it will be a point-in-time view of the state in the db
 2. import from csv can be used to generate the sql required to re-instate the DB
 - this can also be used at the beginning to seed the DB with all my historic data
+
+## DB:
+
+create a local postgres db:
+```
+./run_local_db_docker.sh
+```
+
+create a new migration based off of `./drizzle/schema.ts`:
+```
+deno --env -A --node-modules-dir npm:drizzle-kit push
+```
+
+migrate db:
+```
+deno --env -A --node-modules-dir npm:drizzle-kit migrate
+```
