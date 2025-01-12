@@ -1,5 +1,8 @@
 import client from "./client.ts"
 import { Car } from "./models.ts";
+import { db } from "./db.ts"
+import { cars as carsSchema } from "./schema.ts";
+import { eq } from "drizzle-orm/expressions";
 
 export async function get(id?: string, name?: string): Promise<Car | null> {
     const results = await list(id, name);
@@ -19,4 +22,12 @@ export async function list(id?: string, name?: string): Promise<Array<Car>> {
     const result = await client.queryObject<Car>(query);
 
     return result.rows;
+}
+
+
+// Find car by id.
+export async function findCarById(carId: number) {
+    return await db.select().from(carsSchema).where(
+      eq(carsSchema.id, carId),
+    );
 }

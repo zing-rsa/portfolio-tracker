@@ -21,6 +21,4 @@ else
         echo "PostgreSQL is not ready yet, waiting..."
         sleep 1
     done
-
-    deno run -A ./migrate.ts
 fi
