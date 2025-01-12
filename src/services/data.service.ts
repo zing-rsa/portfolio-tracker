@@ -1,6 +1,6 @@
 import { TransactionsDb } from "../db/mod.ts";
 import { parse, stringify } from "jsr:@std/csv";
-import { TransactionFlat } from "../db/models.ts";
+import { CsvTransaction } from "../dtos.ts";
 
 export async function exportToCsv() {
   const transactions = await TransactionsDb.listWithEntities();
@@ -55,7 +55,7 @@ export async function importFromCsv(csv: string, overwrite: boolean) {
     ],
   });
 
-  const data: TransactionFlat[] = lines.map((x: any) => {
+  const data: CsvTransaction[] = lines.map((x: any) => {
     for (let key in x) {
       if (x[key] === "") x[key] = null;
     }
@@ -70,9 +70,9 @@ export async function importFromCsv(csv: string, overwrite: boolean) {
 
   for (const transaction of data) {
     if (transaction.type === "transfer") {
-      await TransactionsDb.createTransfer(transaction);
+      await TransactionsDb.createTransfer({ ...transaction, timestamp: new Date(transaction.timestamp), ident: 0});
     } else if (transaction.type === "trade") {
-      await TransactionsDb.createTrade(transaction);
+      await TransactionsDb.createTrade({ ...transaction, timestamp: new Date(transaction.timestamp), ident: 0});
     }
   }
 }

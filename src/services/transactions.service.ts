@@ -1,4 +1,4 @@
-import { CreateTradeDto, CreateTransferDto } from "../api/v1/dtos.ts";
+import { CreateTradeDto, CreateTransferDto } from "../dtos.ts";
 import { TransactionsDb } from "../db/mod.ts"
 import { Trade, Transfer } from "../db/models.ts";
 
@@ -12,11 +12,11 @@ export async function list(id?: string) {
 }
 
 export async function createTrade(dto: CreateTradeDto) {
-    const txn: Trade = { ...dto };
+    const txn: Trade = { ...dto, ident: 0, fees: dto.fees.toString(), buyQty: dto.buyQty.toString(), sellQty: dto.sellQty.toString() };
     return await TransactionsDb.createTrade(txn);
 }
 
 export async function createTransfer(dto: CreateTransferDto) {
-    const txn: Transfer = { ...dto };
+    const txn: Transfer = { ...dto, ident: 0, fees: dto.fees.toString(), qty: dto.qty.toString() };
     return await TransactionsDb.createTransfer(txn);
 }

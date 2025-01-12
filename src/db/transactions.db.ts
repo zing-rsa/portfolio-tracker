@@ -1,6 +1,10 @@
 import client from "./client.ts"
 import { Trade, Transaction, TransactionFlat, Transfer } from "./models.ts";
 
+
+import { db } from "./db.ts"
+import { transactions, trades, transfers } from "./schema.ts";
+
 export async function get(id?: string): Promise<Transaction | null> {
     const results = await list(id);
     return results.length == 0 ? null : results[0];
@@ -38,20 +42,26 @@ export async function listWithEntities(id?: string): Promise<Array<TransactionFl
     return result.rows;
 }
 
-export async function createTrade(txn: Trade) {
-    const query = `
-    with inserted as (insert into trades (buyQty, buySymbol, sellQty, sellSymbol) values (${txn.buyQty}, '${txn.buySymbol}', ${txn.sellQty}, '${txn.sellSymbol}') returning id)
-    insert into transactions ("timestamp", fees, ident, "type") select ${txn.timestamp}, ${txn.fees}, id, 'transfer' from inserted; `;
+export async function createTrade(tradeFull: Trade) {
+    const txn: typeof transactions.$inferInsert = { ...tradeFull, timestamp: tradeFull.timestamp.toISOString() };
+    const trade: typeof trades.$inferInsert = tradeFull;
 
-    await client.queryObject(query);
+    const insertedTrade = await db.insert(trades).values(trade).returning();
+
+    txn.ident = insertedTrade[0].id;
+
+    return (await db.insert(transactions).values(txn).returning())[0]; 
 }
 
-export async function createTransfer(txn: Transfer) {
-    const query = `
-    with inserted as (insert into transfers (qty, symbol, sender, receiver) values (${txn.qty}, '${txn.symbol}', '${txn.sender}', '${txn.receiver}') returning id)
-    insert into transactions ("timestamp", fees, ident, "type") select ${txn.timestamp}, ${txn.fees}, id, 'transfer' from inserted; `;
+export async function createTransfer(transferFull: Transfer) {
+    const txn: typeof transactions.$inferInsert = { ...transferFull, timestamp: transferFull.timestamp.toISOString() };
+    const transfer: typeof transfers.$inferInsert = transferFull;
 
-    await client.queryObject(query);
+    const insertedTransfer = await db.insert(transfers).values(transfer).returning();
+
+    txn.ident = insertedTransfer[0].id;
+
+    return (await db.insert(transactions).values(txn).returning())[0];
 }
 
 export async function listTransfers(): Promise<Array<Transfer>> {

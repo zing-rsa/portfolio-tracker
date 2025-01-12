@@ -1,7 +1,7 @@
 import { Router } from "oak/router"
 import * as AssetsService from "../../services/assets.service.ts";
 import { NotFoundException } from "../../exceptions.ts";
-import { CreateAssetDto } from "./dtos.ts";
+import { CreateAssetDto } from "../../dtos.ts";
 
 const router = new Router({ prefix: "/assets"});
 

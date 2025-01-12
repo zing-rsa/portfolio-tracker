@@ -7,6 +7,7 @@ type CreateTransactionDto = {
     type: "transfer" | "trade",
     timestamp: Date
     fees: number
+    feesSymbol: string
 }
 
 export type CreateTradeDto = CreateTransactionDto & {
@@ -38,4 +39,20 @@ export type Balance = {
 export type Value = {
     qty: number,
     symbol: string
+}
+
+export type CsvTransaction = {
+    type: "transfer" | "trade",
+    timestamp: string,
+    fees: string,
+    feesSymbol: string
+    ident: string,
+    sender: string,
+    receiver: string,
+    qty: string,
+    symbol: string,
+    buyQty: string,
+    buySymbol: string,
+    sellQty: string,
+    sellSymbol: string
 }

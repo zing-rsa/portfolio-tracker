@@ -1,7 +1,7 @@
 import { Router } from "oak/router"
 import * as TransactionsService from "../../services/transactions.service.ts";
 import { NotFoundException } from "../../exceptions.ts";
-import { CreateTradeDto, CreateTransferDto } from "./dtos.ts";
+import { CreateTradeDto, CreateTransferDto } from "../../dtos.ts";
 
 const router = new Router({ prefix: "/transactions"});
 

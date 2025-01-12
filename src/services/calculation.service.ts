@@ -1,4 +1,4 @@
-import { Balance, Value } from "../api/v1/dtos.ts";
+import { Balance, Value } from "../dtos.ts";
 import { PricesDb, TransactionsDb } from "../db/mod.ts";
 import { Price } from "../db/models.ts";
 
@@ -19,23 +19,23 @@ export async function balances(): Promise<Balance[]> {
         const element = transfers[i];
 
         if (!addressMap[element.receiver]) {
-            addressMap[element.receiver] = { [element.symbol]: element.qty };
+            addressMap[element.receiver] = { [element.symbol]: parseFloat(element.qty) };
         } else {
             if (!addressMap[element.receiver][element.symbol]) {
-                addressMap[element.receiver][element.symbol] = element.qty;
+                addressMap[element.receiver][element.symbol] =  parseFloat(element.qty);
             } else { 
-                addressMap[element.receiver][element.symbol] += element.qty;
+                addressMap[element.receiver][element.symbol] +=  parseFloat(element.qty);
             }
         }
 
         if (element.sender) { // don't track null sender
             if (!addressMap[element.sender]) {
-                addressMap[element.sender] = { [element.symbol]: -element.qty };
+                addressMap[element.sender] = { [element.symbol]: - parseFloat(element.qty) };
             } else {
                 if (!addressMap[element.receiver][element.symbol]) {
-                    addressMap[element.sender][element.symbol] = -element.qty;
+                    addressMap[element.sender][element.symbol] = - parseFloat(element.qty);
                 } else {
-                    addressMap[element.sender][element.symbol] -= element.qty;
+                    addressMap[element.sender][element.symbol] -=  parseFloat(element.qty);
                 }
             }
         }
@@ -66,5 +66,5 @@ function getUsdFromValue(value: Value, prices: Price[]) {
         return 0;
     }
 
-    return latestPriceForSymbol.priceUsd * value.qty;
+    return parseFloat(latestPriceForSymbol.priceUsd) * value.qty;
 }

@@ -1,4 +1,4 @@
-import { CreateAssetDto } from "../api/v1/dtos.ts";
+import { CreateAssetDto } from "../dtos.ts";
 import { AssetsDb } from "../db/mod.ts"
 import { Asset } from "../db/models.ts";
 
