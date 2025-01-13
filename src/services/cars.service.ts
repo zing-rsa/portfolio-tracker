@@ -1,16 +1,11 @@
 import { CarsDb } from "../db/mod.ts"
 import { findCarById } from "../db/cars.db.ts";
 
-// export async function get(id?: string) {
-//     const results = await list(id);
-//     return results.length == 0 ? null : results[0];
-// }
-
-export async function list(id?: string) {
-    return await CarsDb.list(id);
+export async function list(id?: number, name?: string) {
+    return await CarsDb.list(id, name);
 }
 
-export async function get(id: string) {
-    const results = await findCarById(parseInt(id));
+export async function get(id: number) {
+    const results = await findCarById(id);
     return results;
 }

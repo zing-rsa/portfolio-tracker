@@ -23,7 +23,7 @@ export type Schedule = {
 // Data
 
 export type Car = {
-    id: string,
+    id: number,
     name: string
 }
 
