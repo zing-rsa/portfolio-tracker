@@ -1,4 +1,4 @@
-import client from "./client.ts"
+import { pgClient } from "./db.ts"
 import { Trade, Transaction, TransactionFlat, Transfer } from "./models.ts";
 
 
@@ -18,7 +18,7 @@ export async function list(id?: string): Promise<Array<Transaction>> {
     const query = `select * from public.transactions ${where} order by "timestamp" asc;`;
 
     console.log("Executing query: ", query)
-    const result = await client.queryObject<Transaction>(query);
+    const result = await pgClient.queryObject<Transaction>(query);
 
     return result.rows;
 }
@@ -37,7 +37,7 @@ export async function listWithEntities(id?: string): Promise<Array<TransactionFl
     order by t."timestamp" asc;`;
 
     console.log("Executing query: ", query)
-    const result = await client.queryObject<TransactionFlat>(query);
+    const result = await pgClient.queryObject<TransactionFlat>(query);
 
     return result.rows;
 }
@@ -68,7 +68,7 @@ export async function listTransfers(): Promise<Array<Transfer>> {
     const query = `select * from public.transfers; `;
 
     console.log("Executing query: ", query)
-    const result = await client.queryObject<Transfer>(query);
+    const result = await pgClient.queryObject<Transfer>(query);
 
     return result.rows;
 }
@@ -80,5 +80,5 @@ export async function clear(): Promise<any> {
     delete from public.transactions;`;
 
     console.log("Executing query: ", query)
-    await client.queryObject(query);
+    await pgClient.queryObject(query);
 }

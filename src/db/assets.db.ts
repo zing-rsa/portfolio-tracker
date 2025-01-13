@@ -1,4 +1,4 @@
-import client from "./client.ts"
+import { pgClient } from "./db.ts"
 import { Asset } from "./models.ts";
 
 export async function get(id?: string, name?: string): Promise<Asset | null> {
@@ -16,7 +16,7 @@ export async function list(id?: string, name?: string): Promise<Array<Asset>> {
     const query = `select * from public.cars ${where}; `;
 
     console.log("Executing query: ", query)
-    const result = await client.queryObject<Asset>(query);
+    const result = await pgClient.queryObject<Asset>(query);
 
     return result.rows;
 }
@@ -27,7 +27,7 @@ export async function create(asset: Asset) {
     ('${asset.name}', '${asset.symbol}')
     returning *; `;
 
-    const result = await client.queryObject<Asset>(query);
+    const result = await pgClient.queryObject<Asset>(query);
 
     return result.rows[0];
 }

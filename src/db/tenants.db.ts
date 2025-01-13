@@ -1,5 +1,5 @@
 import { Tenant } from "./models.ts";
-import client from "./client.ts"
+import { pgClient } from "./db.ts"
 
 export async function getForAuth(api_key: string): Promise<Tenant | null> {
     type AuthTenant = Tenant & {
@@ -33,7 +33,7 @@ export async function getForAuth(api_key: string): Promise<Tenant | null> {
         group by t.id;
     `;
 
-    const result = await client.queryObject<AuthTenant>(query);
+    const result = await pgClient.queryObject<AuthTenant>(query);
     if (!result.rowCount) 
         return null;
 
@@ -58,7 +58,7 @@ export async function list(id?: string, api_key?: string): Promise<Array<Tenant>
     const query = `select * from iam.tenants ${where}; `;
     
     console.log("Executing query: ", query)
-    const result = await client.queryObject<Tenant>(query);
+    const result = await pgClient.queryObject<Tenant>(query);
     
     return result.rows;
 }
@@ -69,7 +69,7 @@ export async function create(tenant: Tenant) {
     ('${tenant.email}', '${tenant.name}', '${tenant.api_key}')
     returning *; `;
 
-    const result = await client.queryObject<Tenant>(query);
+    const result = await pgClient.queryObject<Tenant>(query);
 
     return result.rows[0];
 }
@@ -80,5 +80,5 @@ export async function revoke(id: string) {
     set api_key = NULL
     where id = '${id}' ;`
 
-    await client.queryObject(query);
+    await pgClient.queryObject(query);
 }

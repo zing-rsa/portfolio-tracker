@@ -1,5 +1,5 @@
 import { Schedule } from "./models.ts";
-import client from "./client.ts"
+import { pgClient } from "./db.ts"
 
 export async function getDueSchedules(): Promise<Schedule[]> {
     const query = `
@@ -9,7 +9,7 @@ export async function getDueSchedules(): Promise<Schedule[]> {
     (now() at time zone 'utc' > coalesce(s.last_run_datetime, to_timestamp(0)) + (s.run_interval_minutes::text || ' minutes')::interval);
     `;
 
-    const results = await client.queryObject<Schedule>(query);
+    const results = await pgClient.queryObject<Schedule>(query);
     return results.rows;
 }
 
@@ -21,6 +21,6 @@ export async function updateScheduleLastRun(id: string) {
     where id = '${id}';
     `;
 
-    const results = await client.queryObject<Schedule>(query);
+    const results = await pgClient.queryObject<Schedule>(query);
     return results.rows;
 }

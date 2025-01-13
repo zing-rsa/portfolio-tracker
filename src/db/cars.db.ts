@@ -1,4 +1,4 @@
-import client from "./client.ts"
+import { pgClient } from "./db.ts"
 import { Car } from "./models.ts";
 import { db } from "./db.ts"
 import { cars as carsSchema } from "./schema.ts";
@@ -19,7 +19,7 @@ export async function list(id?: string, name?: string): Promise<Array<Car>> {
     const query = `select * from public.cars ${where}; `;
 
     console.log("Executing query: ", query)
-    const result = await client.queryObject<Car>(query);
+    const result = await pgClient.queryObject<Car>(query);
 
     return result.rows;
 }
