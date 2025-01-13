@@ -1,8 +1,8 @@
-import { Price } from "./models.ts";
-
-import { db } from "./db.ts";
-import { prices } from "./schema.ts";
 import { desc } from "drizzle-orm/expressions";
+
+import { prices } from "./schema.ts";
+import { Price } from "./models.ts";
+import { db } from "./db.ts";
 
 export async function list(): Promise<Price[]> {
     const results = await db.select().from(prices);

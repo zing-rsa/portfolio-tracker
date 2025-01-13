@@ -1,7 +1,8 @@
+import { and, eq } from "drizzle-orm/expressions";
+
+import { cars } from "./schema.ts";
 import { Car } from "./models.ts";
 import { db } from "./db.ts"
-import { cars } from "./schema.ts";
-import { and, eq } from "drizzle-orm/expressions";
 
 export async function get(id?: number, name?: string): Promise<Car | null> {
     const results = await list(id, name);
@@ -21,8 +22,6 @@ export async function list(id?: number, name?: string): Promise<Car[]> {
     return results;
 }
 
-
-// Find car by id.
 export async function findCarById(carId: number) {
     return await db.select().from(cars).where(
       eq(cars.id, carId),

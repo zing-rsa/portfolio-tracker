@@ -62,7 +62,6 @@ export async function importFromCsv(csv: string, overwrite: boolean) {
 
     return x;
   });
-  console.log(data);
 
   if (overwrite) {
     await TransactionsDb.clear();

@@ -1,45 +1,45 @@
-import { pgClient } from "./db.ts"
 import { Trade, Transaction, TransactionFlat, Transfer } from "./models.ts";
-
-
-import { db } from "./db.ts"
 import { transactions, trades, transfers } from "./schema.ts";
+import { pgClient } from "./db.ts"
+import { db } from "./db.ts"
+import { eq, and, asc } from "drizzle-orm";
+import { symbol, x } from "joi";
 
-export async function get(id?: string): Promise<Transaction | null> {
+export async function get(id?: number): Promise<Transaction | null> {
     const results = await list(id);
     return results.length == 0 ? null : results[0];
 }
 
-export async function list(id?: string): Promise<Array<Transaction>> {
-    let where = "";
-    if (id != null)
-        where += (where.includes("WHERE") ? "AND " : "WHERE ") + `id = ${id} `;
+export async function list(id?: number): Promise<Array<Transaction>> {
 
-    const query = `select * from public.transactions ${where} order by "timestamp" asc;`;
+    const results = await db
+        .select()
+        .from(transactions)
+        .where(
+            and(
+                id ? eq(transactions.id, id) : undefined
+            )
+        )
+        .orderBy(transactions.timestamp);
 
-    console.log("Executing query: ", query)
-    const result = await pgClient.queryObject<Transaction>(query);
-
-    return result.rows;
+    return results.map((x) => { return { ...x, timestamp: new Date(x.timestamp) }});
 }
 
-export async function listWithEntities(id?: string): Promise<Array<TransactionFlat>> {
-    let where = "";
-    if (id != null)
-        where += (where.includes("WHERE") ? "AND " : "WHERE ") + `t.id = ${id} `;
+export async function listWithEntities(id?: number): Promise<Array<TransactionFlat>> {
 
-    const query = `
-    select t.id, t.type, t."timestamp", t.fees, t."feesSymbol", trns.sender, trns.receiver, trns.qty, trns.symbol, trds."buyQty", trds."buySymbol", trds."sellQty", trds."sellSymbol" 
-    from public.transactions t
-    left join public.transfers trns on t."type" = 'transfer' and t.ident = trns.id
-    left join public.trades trds on t."type" = 'trade' and t.ident = trds.id
-    ${where} 
-    order by t."timestamp" asc;`;
+    const results = await db
+        .select({ id: transactions.id, type: transactions.type, timestamp: transactions.timestamp, fees: transactions.fees, feesSymbol: transactions.feesSymbol, sender: transfers.sender, receiver: transfers.receiver, qty: transfers.qty, symbol: transfers.symbol, buyQty: trades.buyQty, buySymbol: trades.buySymbol, sellQty: trades.sellQty, sellSymbol: trades.sellSymbol })
+        .from(transactions)
+        .leftJoin(transfers, and(eq(transactions.type, 'transfer'), eq(transactions.ident, transfers.id)))
+        .leftJoin(trades, and(eq(transactions.type, 'trade'), eq(transactions.ident, trades.id)))
+        .where(
+            and(
+                id ? eq(transactions.id, id): undefined
+            )
+        )
+        .orderBy(asc(transactions.timestamp))
 
-    console.log("Executing query: ", query)
-    const result = await pgClient.queryObject<TransactionFlat>(query);
-
-    return result.rows;
+    return results.map((x) => { return { ...x, timestamp: new Date(x.timestamp) }});
 }
 
 export async function createTrade(tradeFull: Trade) {
@@ -74,11 +74,7 @@ export async function listTransfers(): Promise<Array<Transfer>> {
 }
 
 export async function clear(): Promise<any> {
-    const query = `
-    delete from public.transfers;
-    delete from public.trades;
-    delete from public.transactions;`;
-
-    console.log("Executing query: ", query)
-    await pgClient.queryObject(query);
+    await db.delete(transfers);
+    await db.delete(trades);
+    await db.delete(transactions);
 }

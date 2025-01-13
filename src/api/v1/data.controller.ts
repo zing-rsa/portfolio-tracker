@@ -5,6 +5,8 @@ const router = new Router({ prefix: "/data"});
 
 router.post("/run_export", async (ctx) => {
     await DataService.exportToCsv();
+
+    ctx.response.status = 200;
 })
 
 router.post("/import_from_csv", async (ctx) => {
@@ -16,6 +18,8 @@ router.post("/import_from_csv", async (ctx) => {
     const csv = new TextDecoder().decode(bytes)
 
     await DataService.importFromCsv(csv, true);
+    
+    ctx.response.status = 200;
 })
 
 export default router;

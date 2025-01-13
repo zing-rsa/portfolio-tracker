@@ -35,16 +35,16 @@ export type Asset = {
 
 export type Transaction = {
     id?: number,
-    type: "transfer" | "trade",
+    type: string,
     timestamp: Date,
-    fees: string,
-    feesSymbol: string
+    fees: string | null,
+    feesSymbol: string | null
     ident: number
 }
 
 export type Transfer = Transaction & {
-    sender: string,
-    receiver: string,
+    sender?: string | null,
+    receiver?: string | null,
     qty: string,
     symbol: string
 }
@@ -56,7 +56,21 @@ export type Trade = Transaction & {
     sellSymbol: string
 }
 
-export type TransactionFlat = Transaction & Transfer & Trade
+export type TransactionFlat = {
+    id?: number,
+    type: string,
+    timestamp: Date,
+    fees: string | null,
+    feesSymbol: string | null
+    sender?: string | null,
+    receiver?: string | null,
+    qty: string | null,
+    symbol: string | null,
+    buyQty: string | null,
+    buySymbol: string | null,
+    sellQty: string | null,
+    sellSymbol: string | null
+}
 
 export type Price = {
     id?: number,

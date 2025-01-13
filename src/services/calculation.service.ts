@@ -18,13 +18,15 @@ export async function balances(): Promise<Balance[]> {
     for (let i = 0; i < transfers.length; i++) {
         const element = transfers[i];
 
-        if (!addressMap[element.receiver]) {
-            addressMap[element.receiver] = { [element.symbol]: parseFloat(element.qty) };
-        } else {
-            if (!addressMap[element.receiver][element.symbol]) {
-                addressMap[element.receiver][element.symbol] = parseFloat(element.qty);
-            } else { 
-                addressMap[element.receiver][element.symbol] += parseFloat(element.qty);
+        if (element.receiver) {
+            if (!addressMap[element.receiver]) {
+                addressMap[element.receiver] = { [element.symbol]: parseFloat(element.qty) };
+            } else {
+                if (!addressMap[element.receiver][element.symbol]) {
+                    addressMap[element.receiver][element.symbol] = parseFloat(element.qty);
+                } else { 
+                    addressMap[element.receiver][element.symbol] += parseFloat(element.qty);
+                }
             }
         }
 
@@ -32,7 +34,7 @@ export async function balances(): Promise<Balance[]> {
             if (!addressMap[element.sender]) {
                 addressMap[element.sender] = { [element.symbol]: -parseFloat(element.qty) };
             } else {
-                if (!addressMap[element.receiver][element.symbol]) {
+                if (!addressMap[element.sender][element.symbol]) {
                     addressMap[element.sender][element.symbol] = -parseFloat(element.qty);
                 } else {
                     addressMap[element.sender][element.symbol] -= parseFloat(element.qty);
