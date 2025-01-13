@@ -1,8 +1,9 @@
 import { TransactionsDb } from "../db/mod.ts";
 import { parse, stringify } from "jsr:@std/csv";
 import { CsvTransaction } from "../dtos.ts";
+import { uploadCsvFile } from "../gateways/drive.gateway.ts";
 
-export async function exportToCsv() {
+export async function exportToCsv(): Promise<string> {
   const transactions = await TransactionsDb.listWithEntities();
 
   const transactionLines = transactions.map((x) => {
@@ -32,7 +33,7 @@ export async function exportToCsv() {
     },
   );
 
-  Deno.writeTextFile("./example.csv", csv);
+  return csv;
 }
 
 export async function importFromCsv(csv: string, overwrite: boolean) {
@@ -74,4 +75,24 @@ export async function importFromCsv(csv: string, overwrite: boolean) {
       await TransactionsDb.createTrade({ ...transaction, timestamp: new Date(transaction.timestamp), ident: 0});
     }
   }
+}
+
+export async function saveStateToDrive() {
+    console.log("saving state to drive")
+
+    const bypassFlag = Deno.env.get("BYPASS_SAVE_STATE");
+
+    if (bypassFlag != undefined && JSON.parse(bypassFlag) === true) {
+      console.log("bypassing state save due to env flag")
+      return;
+    }
+
+    const timestamp = new Date();
+
+    const csvData = await exportToCsv(); 
+
+    await uploadCsvFile(
+      `crypto-transaction-history_backup_${timestamp.toISOString()}`,
+       csvData
+    );
 }

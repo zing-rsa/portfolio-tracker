@@ -11,6 +11,7 @@ insert into iam.role_claims ("role_id", "claim_id") values ('b6bd858c-3852-4185-
 
 -- schedules
 insert into scheduling.schedules ("function_name", "run_datetime", "run_interval_minutes", "last_run_datetime") values ('updateTop20Prices', null, 1, date_trunc('month', now() at time zone 'utc'));
+insert into scheduling.schedules ("function_name", "run_datetime", "run_interval_minutes", "last_run_datetime") values ('saveStateToDrive',  null, 1, date_trunc('month', now() at time zone 'utc'));
 
 -- public data
 insert into cars ("name") values ('mclaren');

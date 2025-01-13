@@ -1,7 +1,7 @@
 import { CreatePriceDto } from "../dtos.ts";
 import { PricesDb } from "../db/mod.ts"
 import { Price } from "../db/models.ts";
-import { fetchLatestPricesTop20 } from "../gateways/coinmarketcap.ts";
+import { fetchLatestPricesTop20 } from "../gateways/coinmarketcap.gateway.ts";
 
 export async function get() {
     const results = await list();
@@ -19,6 +19,7 @@ export async function create(dto: CreatePriceDto) {
 
 
 export async function updateTop20Prices() {
+    console.log("updating prices")
     const priceInfo = await fetchLatestPricesTop20();
 
     for (let price of priceInfo) {
