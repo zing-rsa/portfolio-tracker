@@ -40,6 +40,6 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "prt-tracker-zing"
-          entrypoint: "main.ts"
-          root: "./src"
+          entrypoint: "./src/main.ts"
+          root: ""
           import-map: "deno.json"
