@@ -26,26 +26,19 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: Install step
-        run: "deno install"
-
-      - name: Build step
-        run: "deno run build"
-
-      - name: Run Migrations
-        env: 
-          PG_USER: ${{ secrets.PG_USER}}
-          TEST: ${{ secrets.TEST }}
-          PG_DATABASE: ${{ secrets.PG_DATABASE }}
-          PG_HOSTNAME: ${{ secrets.PG_HOSTNAME }}
-          PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
-          PG_PORT: ${{ secrets.PG_PORT }}
-          PG_USE_TLS: ${{ secrets.PG_USE_TLS }}
-        run: "printenv && echo deno -A --node-modules-dir npm:drizzle-kit migrate"
+      # - name: Run Migrations
+      #   env: 
+      #     PG_USER: ${{ secrets.PG_USER}}
+      #     PG_DATABASE: ${{ secrets.PG_DATABASE }}
+      #     PG_HOSTNAME: ${{ secrets.PG_HOSTNAME }}
+      #     PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
+      #     PG_PORT: ${{ secrets.PG_PORT }}
+      #     PG_USE_TLS: ${{ secrets.PG_USE_TLS }}
+      #   run: "deno -A --node-modules-dir npm:drizzle-kit migrate"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "prt-tracker-zing"
-          entrypoint: "run.exe"
-          root: "./bin"
+          entrypoint: "main.ts"
+          root: "./src"
