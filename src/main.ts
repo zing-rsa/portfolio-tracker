@@ -1,6 +1,6 @@
 import { Router } from "oak/router";
 import { Application } from "oak";
-import "@std/dotenv/load";
+import "jsr:@std/dotenv/load";
 
 import requestLogging from "./middleware/requestlogging.middleware.ts";
 import errorHandling from "./middleware/errorhandling.middleware.ts"
