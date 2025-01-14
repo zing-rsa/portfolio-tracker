@@ -49,7 +49,7 @@ export const roleClaimsInIam = iam.table("role_claims", {
 });
 
 export const schedulesInScheduling = scheduling.table("schedules", {
-	id: uuid().defaultRandom().notNull(),
+	id: uuid().defaultRandom().primaryKey().notNull(),
 	functionName: varchar().notNull(),
 	runDatetime: timestamp({ mode: 'string' }),
 	runIntervalMinutes: integer(),

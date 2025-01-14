@@ -1,0 +1,1 @@
+ALTER TABLE "scheduling"."schedules" ADD PRIMARY KEY ("id");
