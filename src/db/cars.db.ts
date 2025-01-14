@@ -10,8 +10,6 @@ export async function get(id?: number, name?: string): Promise<Car | null> {
 }
 
 export async function list(id?: number, name?: string): Promise<Car[]> {
-    console.log('checking id: ', id)
-    console.log('checking name: ', name)
     const results = await db.select().from(cars).where(
         and(
             id ? eq(cars.id, id) : undefined,

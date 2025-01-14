@@ -11,7 +11,7 @@ export default defineConfig({
     password: Deno.env.get("PG_PASSWORD")!,
     port: parseInt(Deno.env.get("PG_PORT")!),
     database: Deno.env.get("PG_DATABASE")!,
-    ssl: false
+    ssl: JSON.parse(Deno.env.get("PG_USE_TLS") ?? "false")
   }, 
   casing: 'snake_case' 
 });
