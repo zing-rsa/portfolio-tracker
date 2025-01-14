@@ -4,6 +4,8 @@
     "local-dev": "deno --env-file=.env.dev -A --node-modules-dir npm:drizzle-kit migrate && deno run --unstable-cron -A --env-file=.env.dev src/main.ts",
     "dev": "deno -A --node-modules-dir npm:drizzle-kit migrate && deno run --unstable-cron -A src/main.ts",
     "prod": "deno -A --node-modules-dir npm:drizzle-kit migrate && deno run --unstable-cron -A src/main.ts",
+
+    "build": "deno compile -A --unstable-cron --output=bin/run.exe src/main.ts",
     
     "migrate": "deno -A --node-modules-dir npm:drizzle-kit migrate",
     "generate": "deno -A --node-modules-dir npm:drizzle-kit generate"

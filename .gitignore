@@ -4,3 +4,7 @@
 node_modules
 credentials.json
 *.crt
+
+bin/
+
+*.DS_Store

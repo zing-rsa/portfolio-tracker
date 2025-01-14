@@ -22,4 +22,12 @@ router.post("/import_from_csv", async (ctx) => {
     ctx.response.status = 200;
 })
 
+router.post("/test", async (ctx) => {
+    
+    await DataService.saveStateToDrive();
+    
+    ctx.response.status = 200;
+})
+
+
 export default router;
