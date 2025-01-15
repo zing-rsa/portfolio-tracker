@@ -3,13 +3,14 @@ import * as DataService from "../../services/data.service.ts"
 
 const router = new Router({ prefix: "/data"});
 
-router.post("/run_export", async (ctx) => {
-    await DataService.exportToCsv();
+router.post("/export_csv", async (ctx) => {
+    const res = await DataService.exportToCsv();
 
+    ctx.response.body = res;
     ctx.response.status = 200;
 })
 
-router.post("/import_from_csv", async (ctx) => {
+router.post("/import_csv", async (ctx) => {
     const body = await ctx.request.body;
 
     const form: FormData = await body.formData()
@@ -22,7 +23,7 @@ router.post("/import_from_csv", async (ctx) => {
     ctx.response.status = 200;
 })
 
-router.post("/test", async (ctx) => {
+router.post("/save_state", async (ctx) => {
     
     await DataService.saveStateToDrive();
     

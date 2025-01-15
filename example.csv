@@ -1,6 +1,0 @@
-type,timestamp,fees,feesSymbol,sender,receiver,qty,symbol,buyQty,buySymbol,sellQty,sellSymbol
-transfer,2024-12-23T00:00:00.000Z,0,,,0xFC2463F32f75010389cd82972e570b4f269C554f,1.29814,ETH,,,,
-transfer,2024-12-23T00:00:00.000Z,0,,,0x5d8b5358Ad7bEc1932eC0683e49c427fCF0Ba8EE,0.01963,ETH,,,,
-transfer,2024-12-23T00:00:00.000Z,0,,,addr1qysgdw6uqzk9tqv744d7pnz9m7pv0tyldyl029d6myvgedqsej9ypqxscxvt5qesv77jxyfgv8cyd70dgf2p3m4wctaqt2569t,24.36,ADA,,,,
-transfer,2024-12-23T00:00:00.000Z,0,,,addr1qysgdw6uqzk9tqv744d7pnz9m7pv0tyldyl029d6myvgedqsej9ypqxscxvt5qesv77jxyfgv8cyd70dgf2p3m4wctaqt2569t,1,SPACEBUD3733,,,,
-transfer,2024-12-23T00:00:00.000Z,0,,,addr1qysgdw6uqzk9tqv744d7pnz9m7pv0tyldyl029d6myvgedqsej9ypqxscxvt5qesv77jxyfgv8cyd70dgf2p3m4wctaqt2569t,1,SPACEBUD4142,,,,
