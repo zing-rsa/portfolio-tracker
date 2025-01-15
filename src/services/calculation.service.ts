@@ -1,8 +1,8 @@
-import { Balance, Value } from "../dtos.ts";
+import { AddressBalance, BalanceSummary, Value } from "../dtos.ts";
 import { PricesDb, TransactionsDb } from "../db/mod.ts";
 import { Price } from "../db/models.ts";
 
-export async function balances(): Promise<Balance[]> {
+export async function balances(): Promise<BalanceSummary> {
     // get all values at each address
     // foreach address
     // all transfers where receiver = address - all where sender = address
@@ -43,24 +43,28 @@ export async function balances(): Promise<Balance[]> {
         }
     }
 
-    const balances: Balance[] = [];
+    const summary: BalanceSummary = { balances: [], totalUsd: 0 }
     const latestPrices = await PricesDb.listLatestOnly();
 
-    console.log(latestPrices)
-
     for (const address in addressMap) {
-        const balance: Balance = { address: address, values: [], totalUsd: 0 }
+        const balance: AddressBalance = { address: address, assets: [], totalUsd: 0 }
 
         for (const symbol in addressMap[address]) {
-            const value = { symbol, qty: addressMap[address][symbol]}
-            balance.values.push(value)
-            balance.totalUsd += getUsdFromValue(value, latestPrices)
+            const value = { symbol, qty: addressMap[address][symbol] }
+            const usd = getUsdFromValue(value, latestPrices);
+
+            const asset = { value, totalUsd: usd }
+
+            balance.assets.push(asset)
+            balance.totalUsd += usd
         }
 
-        balances.push(balance)
+        summary.balances.push(balance)
     }
 
-    return balances;
+    summary.totalUsd = summary.balances.map(x => x.totalUsd).reduce((curr, next) => { return curr + next })
+
+    return summary;
 }
 
 function getUsdFromValue(value: Value, prices: Price[]) {
@@ -79,7 +83,6 @@ function getUsdFromValue(value: Value, prices: Price[]) {
         }
 
         return parseFloat(latestPriceForSymbol.price) * parseFloat(innerPrice.price) * value.qty;
-
     }
 
     return parseFloat(latestPriceForSymbol.price) * value.qty;

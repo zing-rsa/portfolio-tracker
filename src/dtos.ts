@@ -30,11 +30,21 @@ export type CreatePriceDto = {
     timestamp: Date
 }
 
-export type Balance = {
-    address: string,
-    values: Value[],
+export type BalanceSummary = {
+    balances: AddressBalance[],
     totalUsd: number
 }
+
+export type AddressBalance = {
+    address: string,
+    assets: AssetSummary[],
+    totalUsd: number
+}
+
+export type AssetSummary = {
+    value: Value
+    totalUsd: number
+} 
 
 export type Value = {
     qty: number,
