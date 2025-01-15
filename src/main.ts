@@ -15,7 +15,7 @@ const app = new Application();
 // middleware
 app.use(requestLogging);
 app.use(errorHandling);
-// app.use(authentication); // TODO: auth?
+app.use(authentication);
 
 // routes
 router.use(v1.routes())
