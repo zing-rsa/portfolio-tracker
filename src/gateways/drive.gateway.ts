@@ -18,6 +18,7 @@ export async function uploadCsvFile(filename: string, data: string) {
     const res = await drive.files.list({
         pageSize: 10,
         fields: "nextPageToken, files(id, name)",
+        orderBy: "createdTime"
     });
 
     if (!res?.data?.files?.length)
