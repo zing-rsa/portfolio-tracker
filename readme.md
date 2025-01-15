@@ -34,3 +34,7 @@ deno --env -A --node-modules-dir npm:drizzle-kit generate --custom --name=migrat
 # apply migrations db:
 deno --env -A --node-modules-dir npm:drizzle-kit migrate
 ```
+
+## deploying
+
+Auto deploys to deno deploy on push to master, via `.github/workflows/deploy.yml`
