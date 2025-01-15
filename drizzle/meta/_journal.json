@@ -22,6 +22,20 @@
       "when": 1736889056903,
       "tag": "0002_sched_key",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1736969269313,
+      "tag": "0003_add_trade_address",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1736972034087,
+      "tag": "0004_add_addresses",
+      "breakpoints": true
     }
   ]
 }

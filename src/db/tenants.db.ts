@@ -48,7 +48,7 @@ export async function getForAuth(api_key: string): Promise<Tenant | null> {
     return tenant;
 }
 
-export async function list(id?: string, api_key?: string): Promise<Array<Tenant>> {
+export async function list(id?: string, api_key?: string): Promise<Tenant[]> {
     let where = "";
     if (id != null)
         where += (where.includes("WHERE") ? "AND " : "WHERE ") + `id = ${id} `;

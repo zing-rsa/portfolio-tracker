@@ -1,5 +1,4 @@
-import { pgTable, integer, text, timestamp, pgSchema, unique, varchar, uuid, numeric } from "drizzle-orm/pg-core"
-import { sql } from "drizzle-orm"
+import { pgTable, integer, text, timestamp, pgSchema, unique, varchar, uuid, numeric, boolean } from "drizzle-orm/pg-core"
 
 export const iam = pgSchema("iam");
 export const scheduling = pgSchema("scheduling");
@@ -82,6 +81,7 @@ export const trades = pgTable("trades", {
 	buySymbol: varchar().notNull(),
 	sellQty: numeric().notNull(),
 	sellSymbol: varchar().notNull(),
+	address: varchar().notNull(),
 });
 
 export const transfers = pgTable("transfers", {
@@ -98,4 +98,10 @@ export const prices = pgTable("prices", {
 	price: numeric().notNull(),
 	priceQuotedSymbol: varchar().notNull().default("USD"),
 	timestamp: timestamp({ mode: 'string' }).notNull(),
+});
+
+export const addresses = pgTable("addresses", {
+	id: integer().primaryKey().generatedAlwaysAsIdentity({ name: "addresses_id_seq", startWith: 1, increment: 1, minValue: 1, maxValue: 2147483647, cache: 1 }),
+	address: varchar().notNull(),
+	counted: boolean().notNull().default(true)
 });

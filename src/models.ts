@@ -67,7 +67,8 @@ export type Trade = Transaction & {
     buyQty: string,
     buySymbol: string,
     sellQty: string,
-    sellSymbol: string
+    sellSymbol: string,
+    address: string
 }
 
 export type TransactionFlat = {
@@ -83,7 +84,8 @@ export type TransactionFlat = {
     buyQty: string | null,
     buySymbol: string | null,
     sellQty: string | null,
-    sellSymbol: string | null
+    sellSymbol: string | null,
+    address: string | null
 }
 
 export type Price = {
@@ -92,4 +94,10 @@ export type Price = {
     price: string,
     priceQuotedSymbol: string,
     timestamp: Date
+}
+
+export type Address = {
+    id: number,
+    address: string,
+    counted: boolean
 }

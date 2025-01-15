@@ -19,7 +19,8 @@ export type CreateTradeDto = CreateTransactionDto & {
     buyQty: number,
     buySymbol: string,
     sellQty: number,
-    sellSymbol: string
+    sellSymbol: string,
+    address: string
 }
 
 export type CreateTransferDto =  CreateTransactionDto & {
@@ -49,5 +50,6 @@ export type CsvTransaction = {
     buyQty: string,
     buySymbol: string,
     sellQty: string,
-    sellSymbol: string
+    sellSymbol: string,
+    address: string
 }

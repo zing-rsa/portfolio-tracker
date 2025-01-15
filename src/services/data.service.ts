@@ -4,7 +4,7 @@ import { CsvTransaction } from "../dtos.ts";
 import { uploadCsvFile } from "../gateways/drive.gateway.ts";
 
 export async function exportToCsv(): Promise<string> {
-  const transactions = await TransactionsDb.listWithEntities();
+  const transactions = await TransactionsDb.listFlat();
 
   const transactionLines = transactions.map((x) => {
     return {
@@ -29,6 +29,7 @@ export async function exportToCsv(): Promise<string> {
         "buySymbol",
         "sellQty",
         "sellSymbol",
+        "address"
       ],
     },
   );
@@ -53,6 +54,7 @@ export async function importFromCsv(csv: string, overwrite: boolean) {
       "buySymbol",
       "sellQty",
       "sellSymbol",
+      "address"
     ],
   });
 

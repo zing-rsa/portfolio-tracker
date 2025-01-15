@@ -1,43 +1,65 @@
 import { AddressBalance, BalanceSummary, Value } from "../models.ts";
-import { PricesDb, TransactionsDb } from "../db/mod.ts";
+import { AddressesDb, PricesDb, TransactionsDb } from "../db/mod.ts";
 import { Price } from "../models.ts";
 
 export async function balances(): Promise<BalanceSummary> {
-    // get all values at each address
-    // foreach address
-    // all transfers where receiver = address - all where sender = address
-    // foreach symbol
-    // all trades where buy = symbol - sell = symbol
-    // convert each value to usd
-    // sum and add to totalUsd
-
     const addressMap: Record<string, Record<string, number>> = {};
+    const transactions = await TransactionsDb.listFlat();
+    const excludedAddresses = new Set((await AddressesDb.list()).filter(x => !x.counted).map(x => x.address))
 
-    const transfers = await TransactionsDb.listTransfers();
+    for (let i = 0; i < transactions.length; i++) {
+        const tx = transactions[i];
 
-    for (let i = 0; i < transfers.length; i++) {
-        const element = transfers[i];
-
-        if (element.receiver) {
-            if (!addressMap[element.receiver]) {
-                addressMap[element.receiver] = { [element.symbol]: parseFloat(element.qty) };
+        if (tx.type == 'trade') {
+            // these will always be set if trade
+            tx.address = tx.address!;
+            tx.buyQty = tx.buyQty!;
+            tx.buySymbol = tx.buySymbol!;
+            tx.sellQty = tx.sellQty!;
+            tx.sellSymbol = tx.sellSymbol!;
+            
+            if (!addressMap[tx.address]) {
+                addressMap[tx.address] = {
+                    [tx.buySymbol]: parseFloat(tx.buyQty),
+                    [tx.sellSymbol]: -parseFloat(tx.sellQty)
+                };
             } else {
-                if (!addressMap[element.receiver][element.symbol]) {
-                    addressMap[element.receiver][element.symbol] = parseFloat(element.qty);
-                } else { 
-                    addressMap[element.receiver][element.symbol] += parseFloat(element.qty);
+                if (!addressMap[tx.address][tx.buySymbol])
+                    addressMap[tx.address][tx.buySymbol] = parseFloat(tx.buyQty)
+                else 
+                    addressMap[tx.address][tx.buySymbol] += parseFloat(tx.buyQty);
+
+                if (!addressMap[tx.address][tx.sellSymbol])
+                    addressMap[tx.address][tx.sellSymbol] = -parseFloat(tx.sellQty);
+                else 
+                    addressMap[tx.address][tx.sellSymbol] -= parseFloat(tx.sellQty);
+            }
+        } else if (tx.type == 'transfer') {
+            // these will always be set if transfer
+            tx.symbol = tx.symbol!;
+            tx.qty = tx.qty!;
+
+            if (tx.receiver) {
+                if (!addressMap[tx.receiver]) {
+                    addressMap[tx.receiver] = { [tx.symbol]: parseFloat(tx.qty) };
+                } else {
+                    if (!addressMap[tx.receiver][tx.symbol]) {
+                        addressMap[tx.receiver][tx.symbol] = parseFloat(tx.qty);
+                    } else { 
+                        addressMap[tx.receiver][tx.symbol] += parseFloat(tx.qty);
+                    }
                 }
             }
-        }
-
-        if (element.sender) { // don't track null sender
-            if (!addressMap[element.sender]) {
-                addressMap[element.sender] = { [element.symbol]: -parseFloat(element.qty) };
-            } else {
-                if (!addressMap[element.sender][element.symbol]) {
-                    addressMap[element.sender][element.symbol] = -parseFloat(element.qty);
+    
+            if (tx.sender) { // don't track null sender
+                if (!addressMap[tx.sender]) {
+                    addressMap[tx.sender] = { [tx.symbol]: -parseFloat(tx.qty) };
                 } else {
-                    addressMap[element.sender][element.symbol] -= parseFloat(element.qty);
+                    if (!addressMap[tx.sender][tx.symbol]) {
+                        addressMap[tx.sender][tx.symbol] = -parseFloat(tx.qty);
+                    } else {
+                        addressMap[tx.sender][tx.symbol] -= parseFloat(tx.qty);
+                    }
                 }
             }
         }
@@ -62,7 +84,10 @@ export async function balances(): Promise<BalanceSummary> {
         summary.balances.push(balance)
     }
 
-    summary.totalUsd = summary.balances.map(x => x.totalUsd).reduce((curr, next) => { return curr + next })
+    summary.totalUsd = summary.balances
+        .filter(x => !excludedAddresses.has(x.address))
+        .map(x => x.totalUsd)
+        .reduce((curr, next) => { return curr + next })
 
     return summary;
 }

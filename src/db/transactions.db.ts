@@ -10,7 +10,7 @@ export async function get(id?: number): Promise<Transaction | null> {
     return results.length == 0 ? null : results[0];
 }
 
-export async function list(id?: number): Promise<Array<Transaction>> {
+export async function list(id?: number): Promise<Transaction[]> {
 
     const results = await db
         .select()
@@ -25,10 +25,10 @@ export async function list(id?: number): Promise<Array<Transaction>> {
     return results.map((x) => { return { ...x, timestamp: new Date(x.timestamp) }});
 }
 
-export async function listWithEntities(id?: number): Promise<Array<TransactionFlat>> {
+export async function listFlat(id?: number): Promise<TransactionFlat[]> {
 
     const results = await db
-        .select({ id: transactions.id, type: transactions.type, timestamp: transactions.timestamp, fees: transactions.fees, feesSymbol: transactions.feesSymbol, sender: transfers.sender, receiver: transfers.receiver, qty: transfers.qty, symbol: transfers.symbol, buyQty: trades.buyQty, buySymbol: trades.buySymbol, sellQty: trades.sellQty, sellSymbol: trades.sellSymbol })
+        .select({ id: transactions.id, type: transactions.type, timestamp: transactions.timestamp, fees: transactions.fees, feesSymbol: transactions.feesSymbol, sender: transfers.sender, receiver: transfers.receiver, qty: transfers.qty, symbol: transfers.symbol, buyQty: trades.buyQty, buySymbol: trades.buySymbol, sellQty: trades.sellQty, sellSymbol: trades.sellSymbol, address: trades.address })
         .from(transactions)
         .leftJoin(transfers, and(eq(transactions.type, 'transfer'), eq(transactions.ident, transfers.id)))
         .leftJoin(trades, and(eq(transactions.type, 'trade'), eq(transactions.ident, trades.id)))
@@ -64,7 +64,7 @@ export async function createTransfer(transferFull: Transfer) {
     return (await db.insert(transactions).values(txn).returning())[0];
 }
 
-export async function listTransfers(): Promise<Array<Transfer>> {
+export async function listTransfers(): Promise<Transfer[]> {
     const query = `select * from public.transfers; `;
 
     console.log("Executing query: ", query)
