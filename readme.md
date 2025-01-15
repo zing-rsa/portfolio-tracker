@@ -1,72 +1,36 @@
-portfolio tracker project
+# portfolio tracking project
 
-## approach:
-- track entire portfolio performance over time
-- requires generic tracking of: 
-    - various crypto currencies/FTs
-    - various NFTs
-    - many wallets, many exchanges
-- must cater for:
-    - buy/sells
-    - transfers
-    - de/a/ppreciations/price action
-        - price action tracked via pricing apis or manual entry
+Portfolio manager to track a portfolio over time. Facilitates the maintenance of a list of transactions of arbitrary assets and produces analytics based on that list, such as aggregates of the assets currently held, the historic price action of those assets, as well as the historic and current performance of the portfolio. 
 
-## data schema
+### future plans:
+- import from exchange data
+- export data for tax purposes
+- wallet monitoring for automatic transaction imports
 
-assets
-- name
-- symbol?
-- quantity
-- nft/ft?
+## getting started
 
-transactions
-- order amount
-- order currency
-- action(buy/sell/transfer)
-- date
+#### requirements:   
+- deno
+- docker (for postgres, use other db credentials and don't use `./run_local_db_docker.sh`)
 
-prices
-- asset symbol
-- price
-- price currency
+1. Create a `.env` file in the project root based on `./.env.example`
 
-## data persistance approach:
-We want to make sure that once the data is captured to the DB, it is persisted somewhere else as well and easily recoverable should something happen to the DB.
+2. `deno run local`
 
-high level:
-- export all data to csv
-- csv to sql
+> default api key: 12345
 
-1. export to csv will run daily and contain all transactions(transfers, trades, etc)
-- it will be a point-in-time view of the state in the db
-2. import from csv can be used to generate the sql required to re-instate the DB
-- this can also be used at the beginning to seed the DB with all my historic data
+## migrations
 
-## DB:
-
-create a local postgres db:
-```
+```sh
+# create a local postgres db:
 ./run_local_db_docker.sh
-```
 
-push schema to database based off of `./drizzle/schema.ts`(doesn't gen files?):
-```
-deno --env -A --node-modules-dir npm:drizzle-kit push
-```
-
-generate migration files based on `./drizzle/schema.ts`:
-```
+# generate migration files based on `./drizzle/schema.ts`:  
 deno --env -A --node-modules-dir npm:drizzle-kit generate --name=migration_name
-```
 
-add custom migration(generate empty migration file):
-```
-deno --env -A --node-modules-dir npm:drizzle-kit generate --custom --name=seed-users
-```
+# add custom migration(empty migration file to fill out):
+deno --env -A --node-modules-dir npm:drizzle-kit generate --custom --name=migration_name
 
-migrate db:
-```
+# apply migrations db:
 deno --env -A --node-modules-dir npm:drizzle-kit migrate
 ```
-

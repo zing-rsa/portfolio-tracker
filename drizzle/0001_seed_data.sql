@@ -1,7 +1,7 @@
 -- Custom SQL migration file, put your code below! --
 
 -- tenants
-insert into iam.tenants ("name", "api_key", "email") VALUES ('rob', '12345', 'kritz.rob@gmail.com');
+insert into iam.tenants ("name", "api_key", "email") VALUES ('rob', '12345', 'test@example.com');
 
 -- roles/claims
 insert into iam.tenant_roles (tenant_id, "role_id") values (1, 'b6bd858c-3852-4185-b2b7-0b438c9b3190');
