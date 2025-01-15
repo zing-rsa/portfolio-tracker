@@ -1,4 +1,4 @@
-portfolio tracker project
+## approach
 
 ## requirements:
 - track entire portfolio performance over time
