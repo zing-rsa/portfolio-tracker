@@ -4,11 +4,11 @@ const scopes = ["https://www.googleapis.com/auth/drive"];
 
 const auth = new google.auth.GoogleAuth({credentials: {
         type: "service_account",
-        project_id: Deno.env.get("GOOGLE_PROJECT_ID"),
-        private_key: Deno.env.get("GOOGLE_PRIV_KEY"),
-        private_key_id: Deno.env.get("GOOGLE_PRIV_KEY_ID"),
-        client_email: Deno.env.get("GOOGLE_CLIENT_EMAIL"),
-        client_id: Deno.env.get("GOOGLE_CLIENT_ID"),
+        project_id: Deno.env.get("GOOGLE_PROJECT_ID")!,
+        private_key: Deno.env.get("GOOGLE_PRIV_KEY")!.replace(/\\n/g, '\n'),
+        private_key_id: Deno.env.get("GOOGLE_PRIV_KEY_ID")!,
+        client_email: Deno.env.get("GOOGLE_CLIENT_EMAIL")!,
+        client_id: Deno.env.get("GOOGLE_CLIENT_ID")!,
         universe_domain: "googleapis.com"
  }, scopes: scopes});
 const drive = google.drive({ version: "v3", auth });
