@@ -1,6 +1,6 @@
 import { CreatePriceDto } from "../dtos.ts";
 import { PricesDb } from "../db/mod.ts"
-import { Price } from "../db/models.ts";
+import { Price } from "../models.ts";
 import { fetchLatestPricesTop20 } from "../gateways/coinmarketcap.gateway.ts";
 
 export async function get() {
@@ -13,7 +13,7 @@ export async function list() {
 }
 
 export async function create(dto: CreatePriceDto) {
-    const price: Price = { ...dto, price: dto.priceUsd.toString(), priceQuotedSymbol: "USD" };
+    const price: Price = { ...dto, price: dto.price.toString(), timestamp: new Date(dto.timestamp)};
     return await PricesDb.create(price);
 }
 

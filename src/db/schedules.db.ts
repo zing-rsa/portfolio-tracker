@@ -1,4 +1,4 @@
-import { Schedule } from "./models.ts";
+import { Schedule } from "../models.ts";
 import { pgClient } from "./db.ts"
 
 export async function getDueSchedules(): Promise<Schedule[]> {

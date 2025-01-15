@@ -7,11 +7,6 @@ export type Tenant = {
     roles?: string[]
 }
 
-export type OnboardRequestDTO = {
-    name: string,
-    email: string
-}
-
 export type Schedule = {
     id: string,
     function_name: string,
@@ -20,7 +15,26 @@ export type Schedule = {
     last_run_datetime: Date
 }
 
-// Data
+export type BalanceSummary = {
+    balances: AddressBalance[],
+    totalUsd: number
+}
+
+export type AddressBalance = {
+    address: string,
+    assets: AssetSummary[],
+    totalUsd: number
+}
+
+export type AssetSummary = {
+    value: Value
+    totalUsd: number
+} 
+
+export type Value = {
+    qty: number,
+    symbol: string
+}
 
 export type Car = {
     id: number,

@@ -1,6 +1,6 @@
-import { AddressBalance, BalanceSummary, Value } from "../dtos.ts";
+import { AddressBalance, BalanceSummary, Value } from "../models.ts";
 import { PricesDb, TransactionsDb } from "../db/mod.ts";
-import { Price } from "../db/models.ts";
+import { Price } from "../models.ts";
 
 export async function balances(): Promise<BalanceSummary> {
     // get all values at each address

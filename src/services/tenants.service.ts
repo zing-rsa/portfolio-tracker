@@ -1,7 +1,8 @@
 import { crypto } from "jsr:@std/crypto/crypto";
 import * as base64 from "jsr:@std/encoding/base64";
 
-import { OnboardRequestDTO, Tenant } from "../db/models.ts";
+import { Tenant } from "../models.ts";
+import { OnboardRequestDTO } from "../dtos.ts";
 import { OnboardValidator } from "../api/v1/schema.ts";
 import { TenantsDb } from "../db/mod.ts"
 import { NotFoundException } from "../exceptions.ts";

@@ -1,4 +1,4 @@
-import { Tenant } from "./models.ts";
+import { Tenant } from "../models.ts";
 import { pgClient } from "./db.ts"
 
 export async function getForAuth(api_key: string): Promise<Tenant | null> {

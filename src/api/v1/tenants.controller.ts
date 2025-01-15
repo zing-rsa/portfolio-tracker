@@ -1,6 +1,6 @@
 import { Router } from "oak/router"
 
-import { OnboardRequestDTO } from "../../db/models.ts";
+import { OnboardRequestDTO } from "../../dtos.ts";
 import * as TenantsService from "../../services/tenants.service.ts";
 import { NotFoundException } from "../../exceptions.ts";
 import authorize from "../../middleware/authorize.middleware.ts";

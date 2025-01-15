@@ -1,4 +1,4 @@
-import { Trade, Transaction, TransactionFlat, Transfer } from "./models.ts";
+import { Trade, Transaction, TransactionFlat, Transfer } from "../models.ts";
 import { transactions, trades, transfers } from "./schema.ts";
 import { pgClient } from "./db.ts"
 import { db } from "./db.ts"

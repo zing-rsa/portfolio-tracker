@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm/expressions";
 
 import { cars } from "./schema.ts";
-import { Car } from "./models.ts";
+import { Car } from "../models.ts";
 import { db } from "./db.ts"
 
 export async function get(id?: number, name?: string): Promise<Car | null> {

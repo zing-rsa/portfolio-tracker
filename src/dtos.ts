@@ -1,3 +1,8 @@
+export type OnboardRequestDTO = {
+    name: string,
+    email: string
+}
+
 export type CreateAssetDto = {
     name: string,
     symbol: string
@@ -26,29 +31,9 @@ export type CreateTransferDto =  CreateTransactionDto & {
 
 export type CreatePriceDto = {
     symbol: string,
-    priceUsd: number,
+    price: number,
+    priceQuotedSymbol: string,
     timestamp: Date
-}
-
-export type BalanceSummary = {
-    balances: AddressBalance[],
-    totalUsd: number
-}
-
-export type AddressBalance = {
-    address: string,
-    assets: AssetSummary[],
-    totalUsd: number
-}
-
-export type AssetSummary = {
-    value: Value
-    totalUsd: number
-} 
-
-export type Value = {
-    qty: number,
-    symbol: string
 }
 
 export type CsvTransaction = {
