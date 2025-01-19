@@ -53,3 +53,20 @@ export type CsvTransaction = {
     sellSymbol: string,
     address: string
 }
+
+export type BalanceSummary = {
+    addresses: AddressBalanceSummary[],
+    totalUsd: number
+}
+
+export type AddressBalanceSummary = {
+    address: string,
+    values: Value[]
+    totalUsd: number
+}
+
+export type Value = {
+    symbol: string,
+    qty: number,
+    totalUsd: number
+}

@@ -1,95 +1,52 @@
-import { AddressBalance, BalanceSummary, Value } from "../models.ts";
-import { AddressesDb, PricesDb, TransactionsDb } from "../db/mod.ts";
+import { BalanceSummary, Value } from "../dtos.ts";
+import { TransactionsDb } from "../db/mod.ts";
 import { Price } from "../models.ts";
 
-export async function balances(): Promise<BalanceSummary> {
-    const addressMap: Record<string, Record<string, number>> = {};
-    const transactions = await TransactionsDb.listFlat();
-    const excludedAddresses = new Set((await AddressesDb.list()).filter(x => !x.counted).map(x => x.address))
+export async function balances() : Promise<BalanceSummary> {
+    const addressBalances = await TransactionsDb.listHistoricAddressBalances()
+    const accumulator: Record<string, Value[]> = {}
+    const now = new Date();
 
-    for (let i = 0; i < transactions.length; i++) {
-        const tx = transactions[i];
+    const summary : BalanceSummary = {
+        addresses: [],
+        totalUsd: 0
+    }
 
-        if (tx.type == 'trade') {
-            // these will always be set if trade
-            tx.address = tx.address!;
-            tx.buyQty = tx.buyQty!;
-            tx.buySymbol = tx.buySymbol!;
-            tx.sellQty = tx.sellQty!;
-            tx.sellSymbol = tx.sellSymbol!;
-            
-            if (!addressMap[tx.address]) {
-                addressMap[tx.address] = {
-                    [tx.buySymbol]: parseFloat(tx.buyQty),
-                    [tx.sellSymbol]: -parseFloat(tx.sellQty)
-                };
-            } else {
-                if (!addressMap[tx.address][tx.buySymbol])
-                    addressMap[tx.address][tx.buySymbol] = parseFloat(tx.buyQty)
-                else 
-                    addressMap[tx.address][tx.buySymbol] += parseFloat(tx.buyQty);
+    const todayInfo = addressBalances
+        .filter(x => 
+            x.date.getFullYear() == now.getFullYear() && 
+            x.date.getMonth() == now.getMonth() && 
+            x.date.getDate() == now.getDate() &&
+            x.qty > 0 // only calculate on positive non-zero qtys
+        )
 
-                if (!addressMap[tx.address][tx.sellSymbol])
-                    addressMap[tx.address][tx.sellSymbol] = -parseFloat(tx.sellQty);
-                else 
-                    addressMap[tx.address][tx.sellSymbol] -= parseFloat(tx.sellQty);
-            }
-        } else if (tx.type == 'transfer') {
-            // these will always be set if transfer
-            tx.symbol = tx.symbol!;
-            tx.qty = tx.qty!;
+    for (const balance of todayInfo) {
+        const value = { symbol: balance.symbol, qty: balance.qty, totalUsd: balance.total }
 
-            if (tx.receiver) {
-                if (!addressMap[tx.receiver]) {
-                    addressMap[tx.receiver] = { [tx.symbol]: parseFloat(tx.qty) };
-                } else {
-                    if (!addressMap[tx.receiver][tx.symbol]) {
-                        addressMap[tx.receiver][tx.symbol] = parseFloat(tx.qty);
-                    } else { 
-                        addressMap[tx.receiver][tx.symbol] += parseFloat(tx.qty);
-                    }
-                }
-            }
-    
-            if (tx.sender) { // don't track null sender
-                if (!addressMap[tx.sender]) {
-                    addressMap[tx.sender] = { [tx.symbol]: -parseFloat(tx.qty) };
-                } else {
-                    if (!addressMap[tx.sender][tx.symbol]) {
-                        addressMap[tx.sender][tx.symbol] = -parseFloat(tx.qty);
-                    } else {
-                        addressMap[tx.sender][tx.symbol] -= parseFloat(tx.qty);
-                    }
-                }
-            }
+        if (!accumulator[balance.address]) {
+            accumulator[balance.address] = [value]
+        } else {
+            accumulator[balance.address].push(value)
         }
     }
 
-    const summary: BalanceSummary = { balances: [], totalUsd: 0 }
-    const latestPrices = await PricesDb.listLatestOnly();
+    for (const k in accumulator) {
+        const addressTotal = accumulator[k].map(x => x.totalUsd).reduce((curr, next) => curr + next);
 
-    for (const address in addressMap) {
-        const balance: AddressBalance = { address: address, assets: [], totalUsd: 0 }
+        summary.addresses.push({ 
+            address: k, 
+            totalUsd: addressTotal, 
+            values: accumulator[k] 
+        })
 
-        for (const symbol in addressMap[address]) {
-            const value = { symbol, qty: addressMap[address][symbol] }
-            const usd = getUsdFromValue(value, latestPrices);
-
-            const asset = { value, totalUsd: usd }
-
-            balance.assets.push(asset)
-            balance.totalUsd += usd
-        }
-
-        summary.balances.push(balance)
+        summary.totalUsd += addressTotal;
     }
-
-    summary.totalUsd = summary.balances
-        .filter(x => !excludedAddresses.has(x.address))
-        .map(x => x.totalUsd)
-        .reduce((curr, next) => { return curr + next })
 
     return summary;
+}
+
+export async function totalsHistoric() {
+
 }
 
 function getUsdFromValue(value: Value, prices: Price[]) {

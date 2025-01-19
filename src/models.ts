@@ -15,27 +15,6 @@ export type Schedule = {
     last_run_datetime: Date
 }
 
-export type BalanceSummary = {
-    balances: AddressBalance[],
-    totalUsd: number
-}
-
-export type AddressBalance = {
-    address: string,
-    assets: AssetSummary[],
-    totalUsd: number
-}
-
-export type AssetSummary = {
-    value: Value
-    totalUsd: number
-} 
-
-export type Value = {
-    qty: number,
-    symbol: string
-}
-
 export type Car = {
     id: number,
     name: string
@@ -101,3 +80,13 @@ export type Address = {
     address: string,
     counted: boolean
 }
+
+export type AddressBalance = {
+    date: Date,
+    address: string,
+    qty: number,
+    symbol: string,
+    price: number,
+    total: number
+}
+
