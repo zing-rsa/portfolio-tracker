@@ -1,8 +1,7 @@
-import { BalanceSummary, Value } from "../dtos.ts";
+import { BalanceSummary, HistoricTotal, Value } from "../dtos.ts";
 import { TransactionsDb } from "../db/mod.ts";
-import { Price } from "../models.ts";
 
-export async function balances() : Promise<BalanceSummary> {
+export async function balancesToday() : Promise<BalanceSummary> {
     const addressBalances = await TransactionsDb.listHistoricAddressBalances()
     const accumulator: Record<string, Value[]> = {}
     const now = new Date();
@@ -17,11 +16,13 @@ export async function balances() : Promise<BalanceSummary> {
             x.date.getFullYear() == now.getFullYear() && 
             x.date.getMonth() == now.getMonth() && 
             x.date.getDate() == now.getDate() &&
-            x.qty > 0 // only calculate on positive non-zero qtys
+            parseFloat(x.qty) > 0 // only calculate on positive non-zero qtys
         )
 
+    console.log(todayInfo)
+
     for (const balance of todayInfo) {
-        const value = { symbol: balance.symbol, qty: balance.qty, totalUsd: balance.total }
+        const value: Value = { symbol: balance.symbol, qty: parseFloat(balance.qty), totalUsd: parseFloat(balance.total) }
 
         if (!accumulator[balance.address]) {
             accumulator[balance.address] = [value]
@@ -30,13 +31,13 @@ export async function balances() : Promise<BalanceSummary> {
         }
     }
 
-    for (const k in accumulator) {
-        const addressTotal = accumulator[k].map(x => x.totalUsd).reduce((curr, next) => curr + next);
+    for (const key in accumulator) {
+        const addressTotal = accumulator[key].map(x => x.totalUsd).reduce((curr, next) => curr + next);
 
         summary.addresses.push({ 
-            address: k, 
+            address: key, 
             totalUsd: addressTotal, 
-            values: accumulator[k] 
+            values: accumulator[key]
         })
 
         summary.totalUsd += addressTotal;
@@ -45,27 +46,23 @@ export async function balances() : Promise<BalanceSummary> {
     return summary;
 }
 
-export async function totalsHistoric() {
+export async function totalsHistoric(): Promise<HistoricTotal[]> {
+    const addressBalances = await TransactionsDb.listHistoricAddressBalances()
+    const accumulator: Record<string, number> = {};
+    const records: HistoricTotal[] = [];
 
-}
-
-function getUsdFromValue(value: Value, prices: Price[]) {
-    const latestPriceForSymbol = prices.find((p) => p.symbol == value.symbol);
-    if (!latestPriceForSymbol) {
-        console.error(`No price found for symbol. symbol=${value.symbol}`)
-        return 0;
-    }
-
-    if(latestPriceForSymbol.priceQuotedSymbol != "USD") {
-        const innerPrice = prices.find((p) => latestPriceForSymbol.priceQuotedSymbol == p.symbol);
-
-        if (!innerPrice) {
-            console.error(`No price found for inner symbol. symbol=${value.symbol}`)
-            return 0;
+    for (const record of addressBalances) {
+        const dateString = record.date.toISOString()
+        if (!accumulator[dateString]) {
+            accumulator[dateString] = parseFloat(record.total)
+        } else {
+            accumulator[dateString] += parseFloat(record.total)
         }
-
-        return parseFloat(latestPriceForSymbol.price) * parseFloat(innerPrice.price) * value.qty;
     }
 
-    return parseFloat(latestPriceForSymbol.price) * value.qty;
+    for (const key in accumulator) {
+        records.push({ date: new Date(key), total: accumulator[key]})
+    }
+    
+    return records;
 }

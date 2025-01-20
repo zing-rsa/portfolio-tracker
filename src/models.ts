@@ -84,9 +84,9 @@ export type Address = {
 export type AddressBalance = {
     date: Date,
     address: string,
-    qty: number,
+    qty: string,
     symbol: string,
-    price: number,
-    total: number
+    price: string,
+    total: string,
 }
 

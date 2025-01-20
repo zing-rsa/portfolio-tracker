@@ -65,8 +65,22 @@ export type AddressBalanceSummary = {
     totalUsd: number
 }
 
+export type AddressBalance = {
+    date: Date,
+    address: string,
+    qty: number,
+    symbol: string,
+    price: number,
+    total: number,
+}
+
 export type Value = {
     symbol: string,
     qty: number,
     totalUsd: number
+}
+
+export type HistoricTotal = {
+    date: Date,
+    total: number
 }
