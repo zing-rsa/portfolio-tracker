@@ -1,9 +1,9 @@
 # portfolio tracker api
 
-This is an api designed to help track an asset portfolio over time. It allows you to maintain a list of transactions of arbitrary assets and produces analytics based on that list, like aggregates of the assets currently held, the historic price action of those assets, as well as the historic and current performance of the portfolio.
+An api designed to track an asset portfolio over time. It allows you to maintain a list of transactions of arbitrary assets and produces analytics based on that list, like aggregates of the assets currently held, the historic price action of those assets, as well as the historic and current performance of the portfolio. I use this for my cryptocurrency portfolio but there is no hard link to crypto.
 
 ### future plans:
-- import from exchange data
+- import txns from exchange data
 - export data for tax purposes
 - wallet monitoring for automatic transaction imports
 
