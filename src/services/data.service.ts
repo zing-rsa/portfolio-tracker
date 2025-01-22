@@ -16,7 +16,7 @@ export async function exportToCsv(): Promise<string> {
   const csv = stringify(
     transactionLines,
     {
-      columns: [
+      columns: [ // TODO, add txId, note
         "type",
         "timestamp",
         "fees",
@@ -42,6 +42,7 @@ export async function importFromCsv(csv: string, overwrite: boolean) {
     skipFirstRow: true,
     strip: true,
     columns: [
+      // TODO, add txId, note
       "type",
       "timestamp",
       "fees",
