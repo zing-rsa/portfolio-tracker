@@ -10,9 +10,11 @@ export type CreateAssetDto = {
 
 type CreateTransactionDto = {
     type: "transfer" | "trade",
-    timestamp: Date
-    fees: number
-    feesSymbol: string
+    timestamp: Date,
+    fees: number,
+    feesSymbol: string,
+    txId: string,
+    note: string
 }
 
 export type CreateTradeDto = CreateTransactionDto & {
@@ -51,7 +53,9 @@ export type CsvTransaction = {
     buySymbol: string,
     sellQty: string,
     sellSymbol: string,
-    address: string
+    address: string,
+    txId: string,
+    note: string
 }
 
 export type BalanceSummary = {

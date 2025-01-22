@@ -36,6 +36,13 @@
       "when": 1736972034087,
       "tag": "0004_add_addresses",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1737526564109,
+      "tag": "0005_add_tx_columns",
+      "breakpoints": true
     }
   ]
 }

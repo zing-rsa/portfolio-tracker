@@ -29,7 +29,9 @@ export async function exportToCsv(): Promise<string> {
         "buySymbol",
         "sellQty",
         "sellSymbol",
-        "address"
+        "address",
+        "txId",
+        "note"
       ],
     },
   );
@@ -55,7 +57,9 @@ export async function importFromCsv(csv: string, overwrite: boolean) {
       "buySymbol",
       "sellQty",
       "sellSymbol",
-      "address"
+      "address",
+      "txId",
+      "note"
     ],
   });
 

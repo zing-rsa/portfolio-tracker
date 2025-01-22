@@ -122,7 +122,7 @@ export async function listHistoricAddressBalances() {
     all_combos as (
         select dates."date", addresses_distinct.address, symbols_distinct.symbol
         from (
-            select (generate_series((select min(timestamp) from transactions t ) at time zone 'UTC', now() at time zone 'UTC', '1 day'::interval) at time zone 'UTC')::date as "date"
+            select (generate_series((select min(timestamp) from transactions t ) at time zone 'UTC', (now() at time zone 'UTC') + '1 day'::interval , '1 day'::interval) at time zone 'UTC')::date as "date"
         ) dates
         cross join (
             select distinct address from (
@@ -163,8 +163,8 @@ export async function listHistoricAddressBalances() {
     ) ch on ac.address = ch.address
         and ac.symbol = ch.symbol 
         and ch.date = (select max(date) from cumulative_holdings ch2 where ac.address = ch2.address and ac.symbol = ch2.symbol and ch2.date <= ac.date)
-    left join prices p on p.symbol = ac.symbol and p."timestamp" = (select max(timestamp) from prices p2 where p2.symbol = ac.symbol and p2.timestamp <= ac.date)
-    left join prices p_quoted on p_quoted.symbol = p.price_quoted_symbol and p_quoted."timestamp" = (select max(timestamp) from prices p3 where p3.symbol = p_quoted.symbol and p3.timestamp <= ac.date)
+    left join prices p on p.symbol = ac.symbol and p."timestamp" = (select max(timestamp) from prices p2 where p2.symbol = ac.symbol and p2.timestamp <= ac.date + '1 day'::interval)
+    left join prices p_quoted on p_quoted.symbol = p.price_quoted_symbol and p_quoted."timestamp" = (select max(timestamp) from prices p3 where p3.symbol = p_quoted.symbol and p3.timestamp <= ac.date + '1 day'::interval)
     order by date, address, symbol;`
 
     const results = await pgClient.queryObject<AddressBalance>(query);

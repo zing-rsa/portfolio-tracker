@@ -19,8 +19,6 @@ export async function balancesToday() : Promise<BalanceSummary> {
             parseFloat(x.qty) > 0 // only calculate on positive non-zero qtys
         )
 
-    console.log(todayInfo)
-
     for (const balance of todayInfo) {
         const value: Value = { symbol: balance.symbol, qty: parseFloat(balance.qty), totalUsd: parseFloat(balance.total) }
 

@@ -73,6 +73,8 @@ export const transactions = pgTable("transactions", {
 	timestamp: timestamp({ mode: 'string' }).notNull(),
 	fees: numeric().default('0'),
 	feesSymbol: varchar(),
+	txId: varchar(),
+	note: varchar()
 });
 
 export const trades = pgTable("trades", {
