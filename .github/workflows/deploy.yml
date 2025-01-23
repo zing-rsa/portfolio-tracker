@@ -45,4 +45,3 @@ jobs:
           project: "prt-tracker-zing"
           entrypoint: "src/main.ts"
           root: ""
-          import-map: "deno.json"
