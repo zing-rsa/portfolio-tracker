@@ -80,13 +80,3 @@ export type Address = {
     address: string,
     counted: boolean
 }
-
-export type AddressBalance = {
-    date: Date,
-    address: string,
-    qty: string,
-    symbol: string,
-    price: string,
-    total: string,
-}
-

@@ -1,6 +1,7 @@
 import * as ScheduleService from "./services/schedule.service.ts";
 import * as PricesService from "./services/prices.service.ts";
 import * as DataService from "./services/data.service.ts";
+import * as CalculationService from "./services/calculation.service.ts";
 
 export function start() {
     console.log("--------------------");
@@ -30,5 +31,6 @@ function functionMapper(functionName: string): Function | undefined {
     return {
         "updateTop20Prices": PricesService.updateTop20Prices,
         "saveStateToDrive": DataService.saveStateToDrive,
+        "cacheAddressBalances": CalculationService.cacheAddressBalances,
     }[functionName];
 }

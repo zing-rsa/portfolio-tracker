@@ -43,6 +43,20 @@
       "when": 1737526564109,
       "tag": "0005_add_tx_columns",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1739339971873,
+      "tag": "0006_add-cache",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1739340024703,
+      "tag": "0007_cache-schedule",
+      "breakpoints": true
     }
   ]
 }

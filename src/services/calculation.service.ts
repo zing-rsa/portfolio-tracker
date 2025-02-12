@@ -1,8 +1,8 @@
 import { BalanceSummary, HistoricTotal, Value } from "../dtos.ts";
 import { TransactionsDb } from "../db/mod.ts";
 
-export async function balancesToday() : Promise<BalanceSummary> {
-    const addressBalances = await TransactionsDb.listHistoricAddressBalances()
+export async function balancesToday(refresh?: boolean) : Promise<BalanceSummary> {
+    const addressBalances = await TransactionsDb.listHistoricAddressBalances(refresh)
     const accumulator: Record<string, Value[]> = {}
     const now = new Date();
 
@@ -44,10 +44,12 @@ export async function balancesToday() : Promise<BalanceSummary> {
     return summary;
 }
 
-export async function totalsHistoric(): Promise<HistoricTotal[]> {
-    const addressBalances = await TransactionsDb.listHistoricAddressBalances()
+export async function totalsHistoric(refresh?: boolean): Promise<HistoricTotal[]> {
+    let addressBalances = await TransactionsDb.listHistoricAddressBalances(refresh)
     const accumulator: Record<string, number> = {};
     const records: HistoricTotal[] = [];
+
+    addressBalances = addressBalances.filter(x => parseFloat(x.qty) > 0);
 
     for (const record of addressBalances) {
         const dateString = record.date.toISOString()
@@ -63,4 +65,10 @@ export async function totalsHistoric(): Promise<HistoricTotal[]> {
     }
     
     return records;
+}
+
+export async function cacheAddressBalances(): Promise<void> {
+    console.log("caching address balances")
+    await TransactionsDb.cacheAddressBalances()
+    console.log("caching address balances completed")
 }

@@ -107,3 +107,12 @@ export const addresses = pgTable("addresses", {
 	address: varchar().notNull(),
 	counted: boolean().notNull().default(true)
 });
+
+export const addressBalanceCache = pgTable('address_balance_cache', {
+	date: timestamp().notNull(),
+    address: varchar().notNull(),
+    qty: numeric().notNull(),
+    symbol: varchar().notNull(),
+    price: numeric().notNull(),
+    total: numeric().notNull(),
+});

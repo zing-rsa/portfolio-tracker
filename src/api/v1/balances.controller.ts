@@ -4,11 +4,13 @@ import * as CalculationService from "../../services/calculation.service.ts";
 const router = new Router({ prefix: "/balances"});
 
 router.get("/", async (ctx) => {
-    ctx.response.body = await CalculationService.balancesToday();
+    const refresh = JSON.parse(ctx.request.url.searchParams.get("refresh") ?? "false");
+    ctx.response.body = await CalculationService.balancesToday(refresh);
 })
 
 router.get("/historic", async (ctx) => {
-    ctx.response.body = await CalculationService.totalsHistoric();
+    const refresh = JSON.parse(ctx.request.url.searchParams.get("refresh") ?? "false");
+    ctx.response.body = await CalculationService.totalsHistoric(refresh);
 })
 
 export default router;
