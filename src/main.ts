@@ -14,14 +14,14 @@ const port = Deno.env.get("APP_PORT");
 const app = new Application();
 
 // middleware
-app.use(requestLogging);
-app.use(errorHandling);
-app.use(authentication);
 app.use(
     oakCors({
       origin: "*"
     }),
 );
+app.use(requestLogging);
+app.use(errorHandling);
+app.use(authentication);
 
 // routes
 router.use(v1.routes())
