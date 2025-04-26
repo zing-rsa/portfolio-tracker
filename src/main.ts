@@ -1,3 +1,4 @@
+import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import { Router } from "oak/router";
 import { Application } from "oak";
 import "jsr:@std/dotenv/load";
@@ -16,6 +17,11 @@ const app = new Application();
 app.use(requestLogging);
 app.use(errorHandling);
 app.use(authentication);
+app.use(
+    oakCors({
+      origin: "*"
+    }),
+);
 
 // routes
 router.use(v1.routes())
