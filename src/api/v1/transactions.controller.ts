@@ -10,7 +10,7 @@ router.get("/", async (ctx) => {
 })
 
 router.get("/:id", async (ctx) => {
-    const res = await TransactionsService.get(ctx.params.id)
+    const res = await TransactionsService.get(parseInt(ctx.params.id))
     if (!res) throw new NotFoundException("Resource was not found");
 
     ctx.response.body = res;
@@ -19,7 +19,7 @@ router.get("/:id", async (ctx) => {
 router.post("/trade", async (ctx) => {
     const body: CreateTradeDto = await ctx.request.body.json();
 
-    const res = await TransactionsService.createTrade(body);
+    await TransactionsService.createTrade(body);
 
     ctx.response.status = 201;
 })
@@ -27,7 +27,7 @@ router.post("/trade", async (ctx) => {
 router.post("/transfer", async (ctx) => {
     const body: CreateTransferDto = await ctx.request.body.json();
 
-    const res = await TransactionsService.createTransfer(body);
+    await TransactionsService.createTransfer(body);
 
     ctx.response.status = 201;
 })

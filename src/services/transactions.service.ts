@@ -2,13 +2,13 @@ import { CreateTradeDto, CreateTransferDto } from "../dtos.ts";
 import { TransactionsDb } from "../db/mod.ts"
 import { Trade, Transfer } from "../models.ts";
 
-export async function get(id?: string) {
+export async function get(id?: number) {
     const results = await list(id);
     return results.length == 0 ? null : results[0];
 }
 
-export async function list(id?: string) {
-    return await TransactionsDb.list(id);
+export async function list(id?: number) {
+    return await TransactionsDb.list();
 }
 
 export async function createTrade(dto: CreateTradeDto) {

@@ -81,7 +81,8 @@ export type AddressBalance = {
 export type Value = {
     symbol: string,
     qty: number,
-    totalUsd: number
+    totalUsd: number,
+    priceUsd: number
 }
 
 export type HistoricTotal = {

@@ -20,7 +20,7 @@ export async function balancesToday(refresh?: boolean) : Promise<BalanceSummary>
         )
 
     for (const balance of todayInfo) {
-        const value: Value = { symbol: balance.symbol, qty: parseFloat(balance.qty), totalUsd: parseFloat(balance.total) }
+        const value: Value = { symbol: balance.symbol, qty: parseFloat(balance.qty), totalUsd: parseFloat(balance.total), priceUsd: parseInt(balance.price) }
 
         if (!accumulator[balance.address]) {
             accumulator[balance.address] = [value]
