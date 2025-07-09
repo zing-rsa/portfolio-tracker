@@ -1,6 +1,7 @@
 {
   "version": "4",
   "specifiers": {
+    "jsr:@b-fuze/deno-dom@*": "0.1.52",
     "jsr:@oak/commons@1": "1.0.0",
     "jsr:@oak/oak@17.0.0": "17.0.0",
     "jsr:@std/assert@1": "1.0.6",
@@ -36,6 +37,9 @@
     "npm:pg@^8.13.1": "8.13.1"
   },
   "jsr": {
+    "@b-fuze/deno-dom@0.1.52": {
+      "integrity": "ddd89594d2bd795cfa2c4dc5f93a94694a8a75b8c17c6b909e8c86157cc90b65"
+    },
     "@oak/commons@1.0.0": {
       "integrity": "49805b55603c3627a9d6235c0655aa2b6222d3036b3a13ff0380c16368f607ac",
       "dependencies": [

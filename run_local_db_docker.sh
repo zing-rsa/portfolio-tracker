@@ -5,7 +5,7 @@ then
     echo 'Local Docker postgres container already running'
 else
     echo 'Starting Local Docker postgres container'
-    docker run --rm --name local-postgres-prt-tracker -e POSTGRES_PASSWORD=password -p 5433:5432 -d postgres:15-alpine
+    docker run --rm --name local-postgres-prt-tracker -e POSTGRES_PASSWORD=password -p 5432:5432 -d postgres:15-alpine
 
     if [ $? -ne 0 ]; then
         echo "Error: Failed to start PostgreSQL Docker container."
