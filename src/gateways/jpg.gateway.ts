@@ -16,6 +16,6 @@ export async function fetchBudzFloor(): Promise<FetchLatestPriceResponse> {
     return {
         price: res.data.floor / 1_000_000,
         timestamp: new Date(),
-        symbol: "BUDZ"
+        symbol: "SPACEBUD"
     }
 }
