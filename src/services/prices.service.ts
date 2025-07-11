@@ -1,8 +1,9 @@
 import { CreatePriceDto } from "../dtos.ts";
 import { PricesDb } from "../db/mod.ts"
 import { Price } from "../models.ts";
+
 import { fetchLatestPricesTop20 } from "../gateways/coinmarketcap.gateway.ts";
-import { fetchBudzFloor } from "../gateways/jpg.gateway.ts";
+import { fetchBudzFloor, fetchClayFloor } from "../gateways/jpg.gateway.ts";
 
 export async function get() {
     const results = await list();
@@ -31,6 +32,13 @@ export async function updateTop20Prices() {
 export async function updateBudzPrices() {
     console.log("updating budz prices")
     const priceInfo = await fetchBudzFloor();
+
+    await PricesDb.create({ symbol: priceInfo.symbol, price: priceInfo.price.toString(), priceQuotedSymbol: "ADA", timestamp: priceInfo.timestamp});
+}
+
+export async function updateClayPrices() {
+    console.log("updating clay prices")
+    const priceInfo = await fetchClayFloor();
 
     await PricesDb.create({ symbol: priceInfo.symbol, price: priceInfo.price.toString(), priceQuotedSymbol: "ADA", timestamp: priceInfo.timestamp});
 }

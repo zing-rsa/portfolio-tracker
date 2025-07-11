@@ -33,5 +33,6 @@ function functionMapper(functionName: string): Function | undefined {
         "saveStateToDrive": DataService.saveStateToDrive,
         "cacheAddressBalances": CalculationService.cacheAddressBalances,
         "updateBudzPrices": PricesService.updateBudzPrices,
+        "updateClayPrices": PricesService.updateClayPrices,
     }[functionName];
 }

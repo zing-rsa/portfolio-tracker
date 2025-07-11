@@ -71,6 +71,13 @@
       "when": 1752089315134,
       "tag": "0009_buds_pricing",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1752266684207,
+      "tag": "0010_clay_schedule",
+      "breakpoints": true
     }
   ]
 }

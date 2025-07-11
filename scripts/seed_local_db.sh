@@ -1,0 +1,1 @@
+PGPASSWORD=password psql -h localhost -U postgres -d postgres -p 5432 -f ./local_seed.sql

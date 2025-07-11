@@ -17,6 +17,8 @@ An api designed to track an asset portfolio over time. It allows you to maintain
 
 2. `deno run local`
 
+3. `./scripts/seed_local_db.sh`
+
 > default api key: 12345
 
 ## migrations

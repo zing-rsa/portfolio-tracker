@@ -19,3 +19,16 @@ export async function fetchBudzFloor(): Promise<FetchLatestPriceResponse> {
         symbol: "SPACEBUD"
     }
 }
+
+export async function fetchClayFloor(): Promise<FetchLatestPriceResponse> {
+
+    const endpoint = baseUrl + `/collection/40fa2aa67258b4ce7b5782f74831d46a84c59a0ff0c28262fab21728/floor`
+
+    const res = await axiod.get<JpgFloorResponse>(endpoint, { headers: { "x-jpgstore-csrf-protection": 1 }});
+
+    return {
+        price: res.data.floor / 1_000_000,
+        timestamp: new Date(),
+        symbol: "CLAYNATION"
+    }
+}
