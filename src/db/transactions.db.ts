@@ -146,6 +146,8 @@ export async function listHistoricAddressBalances(refresh?: boolean): Promise<Ad
         )
         select ac.*, 
             ch.qty_held as "qty",
+            case when (p_quoted.price_quoted_symbol is not null) then p.price else null end as "priceInQuotedSymbol",
+            case when (p_quoted.price_quoted_symbol is not null) then p.price_quoted_symbol else null end as "quotedSymbol",
             case 
                 when (p_quoted.price_quoted_symbol is not null) then p.price * p_quoted.price
                 when (p.price_quoted_symbol <> 'USD' and not exists (select * from prices where prices.symbol = p.price_quoted_symbol)) then 0
@@ -172,7 +174,7 @@ export async function listHistoricAddressBalances(refresh?: boolean): Promise<Ad
 
         return res.rows;
     } else {
-        const query = `select * from address_balance_cache order by date, address, symbol;`;
+        const query = `select *, price_in_quoted_symbol as "priceInQuotedSymbol", quoted_symbol as "quotedSymbol" from address_balance_cache order by date, address, symbol;`;
         const res = await pgClient.queryObject<AddressBalance>(query);
 
         return res.rows;

@@ -78,6 +78,13 @@
       "when": 1752266684207,
       "tag": "0010_clay_schedule",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1752471635455,
+      "tag": "0011_quoted_symbol",
+      "breakpoints": true
     }
   ]
 }

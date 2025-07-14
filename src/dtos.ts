@@ -82,7 +82,9 @@ export type Value = {
     symbol: string,
     qty: number,
     totalUsd: number,
-    priceUsd: number
+    priceUsd: number,
+    priceInQuotedSymbol: number,
+    quotedSymbol: string
 }
 
 export type HistoricTotal = {
